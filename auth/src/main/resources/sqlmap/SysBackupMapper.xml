@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.phuag.sample.auth.dao.SysBackupMapper">
+    <resultMap id="BaseResultMap" type="com.phuag.sample.auth.domain.SysBackup" >
+        <id column="id" property="id" jdbcType="VARCHAR" />
+        <result column="file_name" property="fileName" jdbcType="VARCHAR" />
+        <result column="file_size" property="fileSize" jdbcType="VARCHAR" />
+        <result column="create_by" property="createBy" jdbcType="VARCHAR" />
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
+        <result column="remarks" property="remarks" jdbcType="VARCHAR" />
+        <result column="del_flag" property="delFlag" jdbcType="CHAR" />
+    </resultMap>
+
+    <!-- 查询系统所有备份 -->
+    <select id="queryList" resultMap="BaseResultMap">
+        SELECT sb.id, sb.file_name, sb.file_size, sb.create_date ,sb.remarks, su.name AS create_by
+        FROM sys_backup sb
+        LEFT JOIN sys_user su ON sb.create_by = su.id
+        WHERE sb.del_flag = ${@com.phuag.sample.common.persistence.domain.BaseEntity@DEL_FLAG_NORMAL}
+        <if test="keyword != null and keyword != ''">
+            AND LOWER(sb.file_name) LIKE concat('%',LOWER(#{keyword,jdbcType=VARCHAR}),'%')
+            OR LOWER(sb.remarks) LIKE concat('%',LOWER(#{keyword,jdbcType=VARCHAR}),'%')
+        </if>
+        ORDER BY sb.create_date DESC
+    </select>
+
+</mapper>

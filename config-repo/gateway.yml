@@ -1,0 +1,46 @@
+server:
+  port: 8060
+
+management:
+  security:
+    enabled: false
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 20000
+
+ribbon:
+  ReadTimeout: 10000
+  ConnectTimeout: 10000
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: AUTH-SERVICE
+          uri: lb://AUTH-SERVICE
+          predicates:
+            - Path=/AUTH-SERVICE/**
+          filters:
+            - Pach=/AUTH-SERVICE/**
+
+#zuul:
+#  ignoredServices: '*'
+#  routes:
+#    auth-service:
+#      path: /uaa/**
+#      stripPrefix: false
+#      sensitiveHeaders:
+#    svca-service:
+#      path: /svca/**
+#      sensitiveHeaders:
+#    svcb-service:
+#      path: /svcb/**
+#      sensitiveHeaders:
