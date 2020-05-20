@@ -24,13 +24,14 @@ import java.util.List;
 /**
  * HDFS目录和文件操作工具类
  *
- * @author QZB
- * @create 2019-08-27-17:34
+ * @author phuag
  */
 @Component
 @Slf4j
 public class HDFSUtils {
-    // HDFS文件系统服务器的地址以及端口
+    /**
+     * HDFS文件系统服务器的地址以及端口
+      */
     private static String HDFS_PATH;
     // HDFS文件系统服务器的地址以及端口
     private static String HDFS_USER;

@@ -5,6 +5,9 @@ import com.baomidou.mybatisplus.core.injector.DefaultSqlInjector;
 
 import java.util.List;
 
+/**
+ * @author phuag
+ */
 public class TreeSqlInjector extends DefaultSqlInjector {
 
     @Override

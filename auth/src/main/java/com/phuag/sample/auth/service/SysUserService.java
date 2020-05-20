@@ -19,6 +19,7 @@ import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -60,7 +61,8 @@ public class SysUserService extends CrudService<SysUserMapper, SysUser> {
     }
 
     public SysUser getSysUserByLoginName(String username) {
-        return dao.selectSysUserByLoginName(username);
+        return dao.selectSysUserByLoginName(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Username: " + username + " not found"));
     }
 
     public int updateByPrimaryKey(SysUser record) {

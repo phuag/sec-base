@@ -13,6 +13,7 @@ import org.apache.shiro.session.InvalidSessionException;
 import org.apache.shiro.subject.Subject;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 用户工具类
@@ -63,19 +64,8 @@ public class UserUtil {
 	 * @param loginName
 	 * @return 取不到返回null
 	 */
-	public static SysUser getByLoginName(String loginName){
-//		SysUser user = (SysUser) CacheUtils.get(USER_CACHE, USER_CACHE_LOGIN_NAME_ + loginName);
-		SysUser user = null;
-		if (user == null){
-			user = userDao.selectSysUserByLoginName(loginName);
-			if (user == null){
-				return null;
-			}
-//			user.setRoleList(roleDao.findList(new SysRole(user)));
-//			CacheUtils.put(USER_CACHE, USER_CACHE_ID_ + user.getId(), user);
-//			CacheUtils.put(USER_CACHE, USER_CACHE_LOGIN_NAME_ + user.getLoginName(), user);
-		}
-		return user;
+	public static Optional<SysUser> getByLoginName(String loginName){
+		return userDao.selectSysUserByLoginName(loginName);
 	}
 	
 	/**

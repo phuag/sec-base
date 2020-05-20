@@ -13,6 +13,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.util.Date;
 
@@ -38,12 +42,15 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
 	 */
 	@JsonIgnore
 	@TableField(value = "create_by", fill = FieldFill.INSERT)
+	@CreatedBy
 	protected String createBy;
+
 	/**
 	 * 创建日期
  	 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@TableField(value = "create_date", fill = FieldFill.INSERT)
+	@CreatedDate
 	protected Date createDate;
 
 	/**
@@ -51,6 +58,7 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
  	 */
 	@JsonIgnore
 	@TableField(value = "update_by", fill = FieldFill.UPDATE)
+	@LastModifiedBy
 	protected String updateBy;
 
 	/**
@@ -58,6 +66,7 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
 	 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	@TableField(value = "update_Date", fill = FieldFill.UPDATE)
+	@LastModifiedDate
 	protected Date updateDate;
 
 	/**

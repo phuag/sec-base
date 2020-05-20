@@ -115,6 +115,7 @@ mybatis:
 mybatis-plus:
   mapper-locations: classpath*:sqlmap/*Mapper.xml
 
+
 shiro:
   realmClass: com.phuag.sample.auth.shiro.UserPasswordDBRealm
   multiAccountLogin: false

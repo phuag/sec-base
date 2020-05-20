@@ -29,6 +29,6 @@ public class SysOfficeController {
         List<SysOffice> sysUsers = sysOfficeService.searchSysOffice(officeId);
         log.debug("get all SysUser, num:{}", sysUsers.size());
         log.debug("get all SysUser, num:{}", sysOfficeService.searchSysOffice(officeId));
-        return new ResponseEntity<List<SysOffice>>(sysUsers, HttpStatus.OK);
+        return ResponseEntity.ok(sysUsers);
     }
 }

@@ -2,8 +2,10 @@ package com.phuag.sample.auth.configuration;
 
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;
+import com.phuag.sample.common.persistence.AuditMetaObjectHandler;
 import com.phuag.sample.common.persistence.injector.TreeSqlInjector;
 import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -29,4 +31,5 @@ public class MybatisPlusConfig {
     public TreeSqlInjector sqlInjector() {
         return new TreeSqlInjector();
     }
+
 }

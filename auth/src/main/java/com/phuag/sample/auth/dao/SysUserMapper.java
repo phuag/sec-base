@@ -14,6 +14,7 @@ import org.apache.ibatis.annotations.Update;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author vvvvvv
@@ -30,7 +31,7 @@ public interface SysUserMapper extends CrudDao<SysUser> {
     @Select("SELECT * FROM sys_user " +
             "WHERE del_flag = ${@com.phuag.sample.common.persistence.domain.BaseEntity@DEL_FLAG_NORMAL}  " +
             "and login_name= #{loginName,jdbcType=VARCHAR}")
-    SysUser selectSysUserByLoginName(String loginName);
+    Optional<SysUser> selectSysUserByLoginName(String loginName);
 
     /**
      * 根据用户查询角色

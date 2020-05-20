@@ -3,9 +3,11 @@ package com.phuag.sample.auth.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.phuag.sample.auth.domain.SysMenu;
 import com.phuag.sample.auth.domain.SysUser;
+import com.phuag.sample.auth.model.AuthenticationForm;
 import com.phuag.sample.auth.model.SysUserDetail;
 import com.phuag.sample.auth.model.SysUserForm;
 import com.phuag.sample.auth.model.UserPwdForm;
+import com.phuag.sample.auth.security.jwt.JwtTokenProvider;
 import com.phuag.sample.auth.service.SysUserService;
 import com.phuag.sample.common.config.Constants;
 import com.phuag.sample.common.model.ResponseMessage;
@@ -22,9 +24,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -38,6 +47,12 @@ public class SysUserController {
 
     @Autowired
     private SysUserService sysUserService;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
+
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
 
     @GetMapping
     public ResponseEntity<Page<SysUserDetail>> getAllSysUser(
@@ -62,6 +77,25 @@ public class SysUserController {
         SysUserDetail sysUserDetail = sysUserService.fillOfficeInfo(principal);
 
         return ok(sysUserDetail);
+    }
+
+    @PostMapping("/signin")
+    public ResponseEntity signin(@RequestBody AuthenticationForm data) {
+
+        try {
+            String username = data.getUsername();
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
+            SysUser sysUser = sysUserService.getSysUserByLoginName(username);
+            String token = jwtTokenProvider.createToken(username, sysUserService.getSysUserRolesByUser(sysUser).stream()
+                    .map(item -> item.getName()).collect(Collectors.toList()));
+
+            Map<Object, Object> model = new HashMap<>();
+            model.put("username", username);
+            model.put("token", token);
+            return ok(model);
+        } catch (AuthenticationException e) {
+            throw new BadCredentialsException("Invalid username/password supplied");
+        }
     }
 
     @PostMapping("/myMenu")

@@ -24,7 +24,7 @@ public class PingController {
     @GetMapping("/ping")
     @AccessLogger(module = "测试日志模块",describe = "测试日志访问",type = SysLogType.ACCESS,ignore = false)
     public ResponseEntity<ResponseMessage> ping() {
-        return new ResponseEntity<ResponseMessage>(ResponseMessage.info("connected"), HttpStatus.OK);
+        return ResponseEntity.ok(ResponseMessage.info("connected"));
     }
 
 }
