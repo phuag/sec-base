@@ -29,8 +29,6 @@ public abstract class CrudService<D extends CrudDao<T>, T extends DataEntity<T>>
     @Autowired
     protected D dao;
 
-    public abstract String getOprId();
-
     /**
      * 获取单条数据
      *
@@ -89,12 +87,11 @@ public abstract class CrudService<D extends CrudDao<T>, T extends DataEntity<T>>
      */
     @Transactional(rollbackFor = Exception.class)
     public int save(T entity) {
-        String oprId = getOprId();
         if (entity.isNewRecord()) {
-            entity.preInsert(oprId);
+            entity.preInsert();
             return dao.insert(entity);
         } else {
-            entity.preUpdate(oprId);
+            entity.preUpdate();
             return dao.updateById(entity);
         }
     }

@@ -1,4 +1,4 @@
-package com.phuag.sample.modules.sys.controller;
+package com.phuag.sample.auth.controller;
 
 import com.phuag.sample.common.config.Constants;
 import com.phuag.sample.common.logging.AccessLogger;

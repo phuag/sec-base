@@ -47,8 +47,4 @@ public class SysLogService extends CrudService<SysLogMapper,SysLog> {
         return LogTryOutDetails;
     }
 
-    @Override
-    public String getOprId() {
-        return UserUtil.getUser().getId();
-    }
 }

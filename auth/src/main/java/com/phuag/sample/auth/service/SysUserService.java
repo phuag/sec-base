@@ -1,7 +1,6 @@
 package com.phuag.sample.auth.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.phuag.sample.auth.configuration.shiro.ShiroProperties;
 import com.phuag.sample.auth.dao.SysUserMapper;
 import com.phuag.sample.auth.domain.SysMenu;
 import com.phuag.sample.auth.domain.SysOffice;
@@ -16,10 +15,10 @@ import com.phuag.sample.common.util.DTOUtil;
 import com.phuag.sample.common.util.Encodes;
 import com.phuag.sample.auth.util.WebUtil;
 import org.apache.shiro.crypto.hash.SimpleHash;
-import org.apache.shiro.session.mgt.eis.SessionDAO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -37,17 +36,9 @@ import java.util.stream.Collectors;
 @Transactional(rollbackFor = Exception.class)
 public class SysUserService extends CrudService<SysUserMapper, SysUser> {
 
-    @Autowired
-    private ShiroProperties properties;
-
     private String defaultPwd="123456";
 
-    @Resource
-    private SessionDAO sessionDao;
 
-    public SessionDAO getSessionDao() {
-        return sessionDao;
-    }
 
     public SysUser getSysUserById(String id) {
         return dao.selectById(id);
@@ -112,8 +103,8 @@ public class SysUserService extends CrudService<SysUserMapper, SysUser> {
      * 生成安全的密码，生成随机的16位salt并经 过1024次sha-1 hash
      */
     public String encryptPassword(String plainPassword) {
-        byte[] salt = Salt.generateSalt(properties.getSaltSize());
-        byte[] hashPassword = new SimpleHash(properties.getHashAlgorithmName(), plainPassword, salt, properties.getHashIterations()).getBytes();
+        byte[] salt = Salt.generateSalt(8);
+        byte[] hashPassword = new SimpleHash("SHA-1", plainPassword, salt, 1024).getBytes();
         return Encodes.encodeHex(salt) + Encodes.encodeHex(hashPassword);
     }
 
@@ -126,7 +117,7 @@ public class SysUserService extends CrudService<SysUserMapper, SysUser> {
      */
     public boolean validatePassword(String plainPassword, String password) {
         byte[] salt = Encodes.decodeHex(password.substring(0, 16));
-        byte[] hashPassword = new SimpleHash(properties.getHashAlgorithmName(), plainPassword, salt, properties.getHashIterations()).getBytes();
+        byte[] hashPassword = new SimpleHash("SHA-1", plainPassword, salt, 1024).getBytes();
         return password.equals(Encodes.encodeHex(salt) + Encodes.encodeHex(hashPassword));
     }
 
@@ -187,8 +178,14 @@ public class SysUserService extends CrudService<SysUserMapper, SysUser> {
         return sysMenus;
     }
 
-    @Override
-    public String getOprId() {
-        return UserUtil.getUser().getId();
+    public static void main(String[] args) {
+        String pwd = "admin";
+        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        String passencode =  passwordEncoder.encode("admin");
+        System.out.println(passencode);
+        //{bcrypt}$2a$10$.UVEQnZqTc3xTJCk3PIXFekHHFdJnv/SVm9xa2iX1TshM.INNMe/e
+        //{bcrypt}$2a$10$0wOwSg/BnCHvC2Qd5biSVOmH8oJvyySJ0CsQj6LipWkisUTqxp4ey
+        boolean result = passwordEncoder.matches(pwd,passencode);
+        System.out.println(result);
     }
 }

@@ -35,8 +35,4 @@ public class SysMenuService extends CrudService<SysMenuMapper, SysMenu> {
         return list;
     }
 
-    @Override
-    public String getOprId() {
-        return UserUtil.getUser().getId();
-    }
 }

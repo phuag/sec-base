@@ -25,7 +25,7 @@ public class SysRoleService extends CrudService<SysRoleMapper, SysRole> {
 
     public void saveSysRole(SysRoleForm form) {
         SysRole sysRole = DTOUtil.map(form,SysRole.class);
-        sysRole.preInsert(getOprId());
+        sysRole.preInsert();
         String roleId = sysRole.getId();
         int result = dao.insert(sysRole);
         // 保存角色和菜单对应关系
@@ -78,8 +78,4 @@ public class SysRoleService extends CrudService<SysRoleMapper, SysRole> {
         }
     }
 
-    @Override
-    public String getOprId() {
-        return UserUtil.getUser().getId();
-    }
 }

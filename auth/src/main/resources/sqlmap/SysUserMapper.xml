@@ -60,7 +60,7 @@
     SELECT
     *
     FROM sys_user
-    WHERE del_flag = ${@com.phuag.sample.auth.persistence.domain.BaseEntity@DEL_FLAG_NORMAL}
+    WHERE del_flag = ${@com.phuag.sample.common.persistence.domain.BaseEntity@DEL_FLAG_NORMAL}
     <if test="keyword != null and keyword != ''">
       AND (LOWER(login_name) LIKE concat('%',LOWER(#{keyword,jdbcType=VARCHAR}),'%')
       OR LOWER(name) LIKE concat('%',LOWER(#{keyword,jdbcType=VARCHAR}),'%'))

@@ -19,7 +19,7 @@ spring:
         url: http://localhost:8040
   datasource:
     druid:
-      url: jdbc:mysql://${sysbackup.dbIp}:3306/${sysbackup.dbName}?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false
+      url: jdbc:mysql://${sysbackup.dbIp}:3306/${sysbackup.dbName}?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true
       username: root
       password: 123456
       driver-class-name: com.mysql.cj.jdbc.Driver
@@ -54,11 +54,11 @@ spring:
       #根据配置中的url-pattern来访问内置监控页面，如果是上面的配置，内置监控页面的首页是/druid/index.html例如：
       #http://110.76.43.235:9000/druid/index.html
       #http://110.76.43.235:8080/mini-web/druid/index.html
-      stat-view-servlet.url-pattern:  /druid/*
-      #允许清空统计数据
-      stat-view-servlet.reset-enable:  true
-      stat-view-servlet.login-username: admin
-      stat-view-servlet.login-password: admin
+#      stat-view-servlet.url-pattern:  /druid/*
+#      #允许清空统计数据
+#      stat-view-servlet.reset-enable:  true
+#      stat-view-servlet.login-username: admin
+#      stat-view-servlet.login-password: admin
       #StatViewSerlvet展示出来的监控信息比较敏感，是系统运行的内部情况，如果你需要做访问控制，可以配置allow和deny这两个参数
       #deny优先于allow，如果在deny列表中，就算在allow列表中，也会被拒绝。如果allow没有配置或者为空，则允许所有访问
       #配置的格式
@@ -101,29 +101,6 @@ mybatis-plus:
     db-config:
       id-type: assign_id
 
-shiro:
-  realmClass: com.phuag.sample.auth.shiro.UserPasswordDBRealm
-  multiAccountLogin: false
-  loginUrl: /api/sysUser/me
-#  successUrl: /main.html#/main
-#  unauthorizedUrl: /main.html#/404
-  filterChainDefinitions:
-     '[/druid/*]': anon
-     '[swagger-ui.html*]': anon
-     '[/bower_components/**]': anon
-     '[/js/**]': anon
-     '[/css/**]': anon
-     '[/images/**]': anon
-     '[/partials/**]': anon
-     '[/i18n/**]': anon
-     '[/api/ping]': anon
-     '[/api/sysUser/login]': anon
-     '[/main.html#/register]': anon
-     '[/main.html#/login]': authcBasic
-     '[/api/sysUser/me]': authcBasic
-#     /api/logout: logout
-     '[/api/**]': user
-     '[/main.html#/**]': user
 logging:
   maxFileSize: 10KB
   level:
@@ -133,5 +110,3 @@ logging:
     com.alibaba.druid: DEBUG
   file:
     name: app.log
-
-

@@ -151,8 +151,4 @@ public class SysBackupService extends CrudService<SysBackupMapper, SysBackup> {
 
     }
 
-    @Override
-    public String getOprId() {
-        return UserUtil.getUser().getId();
-    }
 }

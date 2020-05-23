@@ -54,15 +54,13 @@ public abstract class BaseEntity<T> implements Serializable {
 
 	/**
 	 * 插入之前执行方法，子类实现
-	 * @param oprId 操作者id
 	 */
-	public abstract void preInsert(String oprId);
+	public abstract void preInsert();
 	
 	/**
 	 * 更新之前执行方法，子类实现
-	 * @param oprId 操作者id
 	 */
-	public abstract void preUpdate(String oprId);
+	public abstract void preUpdate();
 	
     /**
 	 * 是否是新记录（默认：false），调用setIsNewRecord()设置新记录，使用自定义ID。

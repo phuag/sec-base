@@ -23,12 +23,11 @@ public abstract class TreeService<D extends TreeDao<T>, T extends TreeEntity<T>>
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int save(T entity) {
-        String oprId = getOprId();
         if (entity.isNewRecord()) {
-            entity.preInsert(oprId);
+            entity.preInsert();
             return dao.insert(entity);
         } else {
-            entity.preUpdate(oprId);
+            entity.preUpdate();
             @SuppressWarnings("unchecked")
             Class<T> entityClass = Reflections.getClassGenricType(getClass(), 1);
 

@@ -2,7 +2,6 @@ package com.phuag.sample.file.service;
 
 import com.phuag.sample.common.persistence.service.CrudService;
 import com.phuag.sample.common.util.IdGen;
-import com.phuag.sample.common.util.JSONUtils;
 import com.phuag.sample.file.dao.VirtualAddressMapper;
 import com.phuag.sample.file.domain.VirtualAddress;
 import org.springframework.stereotype.Service;
@@ -94,11 +93,5 @@ public class VirtualaddressService extends CrudService<VirtualAddressMapper, Vir
         virtualAddressDO.setUuid(IdGen.uuid());
         dao.saveVirtualAddress(virtualAddressDO);
         return virtualAddressDO;
-    }
-
-
-    @Override
-    public String getOprId() {
-        return null;
     }
 }

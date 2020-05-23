@@ -81,7 +81,7 @@ public class LogUtils {
 			log.setRequestUri(request.getRequestURI());
 //			log.setParams(request.getParameterMap());
 			log.setMethod(request.getMethod());
-			log.preInsert(user.getId());
+			log.preInsert();
 			// 异步保存日志
 			new SaveLogThread(log, handler, ex).start();
 		}

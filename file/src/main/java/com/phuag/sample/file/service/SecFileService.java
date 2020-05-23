@@ -167,11 +167,6 @@ public class SecFileService extends CrudService<SecFileMapper, SecFile> {
         return map;
     }
 
-    @Override
-    public String getOprId() {
-        return null;
-    }
-
     /**
      * 保存文件到数据库
      */

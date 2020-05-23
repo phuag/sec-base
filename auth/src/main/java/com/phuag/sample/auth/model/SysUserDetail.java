@@ -1,5 +1,6 @@
 package com.phuag.sample.auth.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.phuag.sample.auth.domain.SysOffice;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -45,6 +46,7 @@ public class SysUserDetail implements Serializable {
     /**
      * 生日
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date birth;
 
     /**
@@ -90,6 +92,7 @@ public class SysUserDetail implements Serializable {
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
 
     /**

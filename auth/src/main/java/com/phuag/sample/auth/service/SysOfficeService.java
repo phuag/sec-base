@@ -32,11 +32,6 @@ public class SysOfficeService extends TreeService<SysOfficeMapper, SysOffice> {
         return offices;
     }
 
-    @Override
-    public String getOprId() {
-        return UserUtil.getUser().getId();
-    }
-
 //    @Transactional(readOnly = true,rollbackFor = Exception.class)
 //    public String getOfficeNameWithPath(SysOffice office) {
 //        StringBuilder officeNameWithPath = new StringBuilder();

@@ -23,12 +23,6 @@ public class SysAreaService extends CrudService<SysAreaMapper, SysArea> {
         List<String> list =  dao.getAreaid(id);
         return list;
     }
-
-
-    @Override
-    public String getOprId() {
-        return UserUtil.getUser().getId();
-    }
 }
 
 
