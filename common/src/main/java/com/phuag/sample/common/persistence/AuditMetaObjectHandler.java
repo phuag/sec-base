@@ -1,7 +1,7 @@
 package com.phuag.sample.common.persistence;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
-import com.phuag.sample.common.util.UserContextHolder;
+import com.phuag.sample.common.util.ThreadLocalUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.reflection.MetaObject;
 
@@ -17,9 +17,9 @@ public class AuditMetaObjectHandler implements MetaObjectHandler {
         log.info("start insert fill ....");
         this.strictInsertFill(metaObject, "createTime", LocalDateTime.class, LocalDateTime.now());
         //获取用户，如果使用SpringSecurity的话可以从SecurityContext中获取
-        String username = UserContextHolder.getInstance().getUserId();
-        this.strictUpdateFill(metaObject, "createBy", String.class, username);
-        this.strictUpdateFill(metaObject, "updateBy", String.class, username);
+        String userId = ThreadLocalUtils.get(ThreadLocalUtils.USERID_KEY);
+        this.strictUpdateFill(metaObject, "createBy", String.class, userId);
+        this.strictUpdateFill(metaObject, "updateBy", String.class, userId);
     }
 
     @Override
@@ -27,7 +27,7 @@ public class AuditMetaObjectHandler implements MetaObjectHandler {
         log.info("start update fill ....");
         this.strictUpdateFill(metaObject, "updateDate", LocalDateTime.class, LocalDateTime.now());
         //获取用户，如果使用SpringSecurity的话可以从SecurityContext中获取
-        String username = UserContextHolder.getInstance().getUserId();
-        this.strictUpdateFill(metaObject, "updateBy", String.class, username);
+        String userId = ThreadLocalUtils.get(ThreadLocalUtils.USERID_KEY);
+        this.strictUpdateFill(metaObject, "updateBy", String.class, userId);
     }
 }

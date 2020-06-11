@@ -1,11 +1,9 @@
-import service from './api'
-import * as base64 from '../common/js/base64'
+import service from '../api'
+// import * as base64 from '../common/js/base64'
 
 // export const requestLogin = params => { return service.post(`/login`, params).then(res => res.data) }
 export const requestLogin = params => {
-  // httpHeaders.Authorization = 'Basic ' + base64.encode(params.username + ':' + params.password)
-  service.defaults.headers.common['Authorization'] = 'Basic ' + base64.encode(params.username + ':' + params.password)
-  return service.post(`/api/sysUser/me`).then(res => res.data)
+  return service.post(`/api/sysUser/signin`, params).then(res => res.data)
 }
 
 export const requestLogout = () => {

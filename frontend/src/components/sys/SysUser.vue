@@ -4,7 +4,7 @@
     <el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
       <el-form :inline="true" :model="filters">
         <el-form-item>
-          <el-cascader filterable clearable change-on-select v-model="filters.office" :options="officeOptions" :props="props" placeholder="所在部门">
+          <el-cascader clearable v-model="filters.office" :options="officeOptions" :props="props" placeholder="所在部门">
           </el-cascader>
         </el-form-item>
         <el-form-item>
@@ -46,7 +46,7 @@
     <!--工具条-->
     <el-col :span="24" class="toolbar">
       <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
-      <el-pagination background layout="prev, pager, next" :current-page.sync="page" @current-change="getSysUsers" :page-size="size" :total="total" style="float:right;">
+      <el-pagination background layout="prev, pager, next" :current-page.sync="current" @current-change="getSysUsers" :page-size="size" :total="total" style="float:right;">
       </el-pagination>
     </el-col>
 
@@ -54,7 +54,7 @@
     <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
       <el-form :model="editForm" label-width="100px" :rules="editFormRules" ref="editForm">
         <el-form-item label="所在部门" prop="officeIds">
-          <el-cascader clearable change-on-select v-model="editForm.officeIds" :options="officeOptions" :props="props" placeholder="所在部门">
+          <el-cascader clearable v-model="editForm.officeIds" :options="officeOptions" :props="props" placeholder="所在部门">
           </el-cascader>
         </el-form-item>
         <el-form-item label="登录名" prop="loginName">
@@ -100,7 +100,7 @@
     <el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
       <el-form :model="addForm" label-width="100px" :rules="addFormRules" ref="addForm">
         <el-form-item label="所在部门" prop="officeIds">
-          <el-cascader clearable change-on-select v-model="addForm.officeIds" :options="officeOptions" :props="props" placeholder="所在部门">
+          <el-cascader clearable v-model="addForm.officeIds" :options="officeOptions" :props="props" placeholder="所在部门">
           </el-cascader>
         </el-form-item>
         <el-form-item label="登录名" prop="loginName">
@@ -136,9 +136,9 @@
 <script>
 import util from '../../common/js/util'
 // import NProgress from 'nprogress'
-import { getSysUserListPage, removeSysUser, batchRemoveSysUser, editSysUser, addSysUser, checkLoginName } from '../../api/sysUser'
-import { getOfficeList } from '../../api/sysOffice'
-import { getRoleList } from '../../api/sysRole'
+import { getSysUserListPage, removeSysUser, batchRemoveSysUser, editSysUser, addSysUser, checkLoginName } from '../../api/sys/sysUser'
+import { getOfficeList } from '../../api/sys/sysOffice'
+import { getRoleList } from '../../api/sys/sysRole'
 import router from '../../router'
 
 export default {
@@ -168,13 +168,14 @@ export default {
       },
       officeOptions: [],
       props: {
+        checkStrictly: true,
         value: 'id',
         label: 'name',
         children: 'offices'
       },
       sysUsers: [],
       total: 0,
-      page: 1,
+      current: 1,
       size: 10,
       listLoading: false,
       sels: [], // 列表选中列
@@ -233,16 +234,16 @@ export default {
   },
   methods: {
     // 性别显示转换
-    formatSex: function (row, column) {
+    formatSex: function (row) {
       return row.sex === '男' ? '男' : row.sex === '女' ? '女' : '未知'
     },
-    formatBirth: function (row, column) {
+    formatBirth: function (row) {
       return util.formatDate.format(new Date(row.birth))
     },
     formatDate: function (val) {
       return util.formatDate.format(new Date(val), 'yyyy-MM-dd hh:mm:ss')
     },
-    unit_formatter: function (row, column) {
+    unit_formatter: function (row) {
       return util.getFullPath(this.unitHash, row.office.parentIds, 'name', '-', row.office.name)
     },
     querySysUsers: function () {
@@ -260,7 +261,7 @@ export default {
     // 获取用户列表
     getSysUsers () {
       let para = {
-        page: this.page,
+        page: this.current,
         size: this.size,
         office: this.filters.office[this.filters.office.length - 1],
         q: this.filters.name
@@ -269,7 +270,7 @@ export default {
       // NProgress.start()
       getSysUserListPage(para).then((res) => {
         this.total = res.data.total
-        this.sysUsers = res.data.list
+        this.sysUsers = res.data.records
         this.listLoading = false
         // NProgress.done()
       }).catch(err => {
@@ -296,8 +297,8 @@ export default {
           this.listLoading = false
           // NProgress.done()
           this.$message({
-            message: '删除成功',
-            type: 'success'
+            message: res.data.text,
+            type: res.data.type
           })
           this.getSysUsers()
         })
@@ -308,8 +309,10 @@ export default {
     // 显示编辑界面
     handleEdit: function (index, row) {
       this.editForm = Object.assign({}, row)
+      debugger
       // 按照el-cascader数据格式要求，指定该对象绑定要求
       this.editForm.officeIds = this.editForm.office.parentIds.split(',')
+      .filter(item => item != '' & item !='0')
       this.editForm.officeIds.push(this.editForm.office.id)
       this.editFormVisible = true
     },
@@ -336,7 +339,7 @@ export default {
               this.editLoading = false
               this.$message({
                 message: '提交成功',
-                type: 'success'
+                type: res.data.type
               })
               this.$refs['editForm'].resetFields()
               this.editFormVisible = false
@@ -359,7 +362,7 @@ export default {
               this.addLoading = false
               this.$message({
                 message: '提交成功',
-                type: 'success'
+                type: res.data.type
               })
               this.$refs['addForm'].resetFields()
               this.addFormVisible = false
@@ -384,7 +387,7 @@ export default {
           this.listLoading = false
           this.$message({
             message: '删除成功',
-            type: 'success'
+            type: res.data.type
           })
           this.getSysUsers()
         })

@@ -1,39 +1,34 @@
 package com.phuag.sample.auth.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.phuag.sample.auth.dao.SysUserMapper;
 import com.phuag.sample.auth.domain.SysMenu;
 import com.phuag.sample.auth.domain.SysUser;
 import com.phuag.sample.auth.model.AuthenticationForm;
 import com.phuag.sample.auth.model.SysUserDetail;
 import com.phuag.sample.auth.model.SysUserForm;
 import com.phuag.sample.auth.model.UserPwdForm;
-import com.phuag.sample.auth.security.jwt.JwtTokenProvider;
 import com.phuag.sample.auth.service.SysUserService;
+import com.phuag.sample.auth.util.UserUtil;
+import com.phuag.sample.auth.util.WebUtil;
 import com.phuag.sample.common.config.Constants;
-import com.phuag.sample.common.model.ResponseMessage;
 import com.phuag.sample.common.enums.ResultEnum;
 import com.phuag.sample.common.exception.InnerException;
+import com.phuag.sample.common.model.ResponseMessage;
+import com.phuag.sample.common.util.SpringContextHolder;
+import com.phuag.sample.common.util.ThreadLocalUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.session.Session;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -47,12 +42,6 @@ public class SysUserController {
 
     @Autowired
     private SysUserService sysUserService;
-
-    @Autowired
-    AuthenticationManager authenticationManager;
-
-    @Autowired
-    JwtTokenProvider jwtTokenProvider;
 
     @GetMapping
     public ResponseEntity<Page<SysUserDetail>> getAllSysUser(
@@ -72,8 +61,8 @@ public class SysUserController {
      */
     @PostMapping("/me")
     public ResponseEntity<SysUserDetail> user() {
-        SysUser principal = (SysUser) SecurityUtils.getSubject().getPrincipal();
-        log.debug("get principal @" + principal.toString());
+        SysUser principal = UserUtil.getPrincipal();
+        log.debug("get principal @{}", principal.toString());
         SysUserDetail sysUserDetail = sysUserService.fillOfficeInfo(principal);
 
         return ok(sysUserDetail);
@@ -81,45 +70,34 @@ public class SysUserController {
 
     @PostMapping("/signin")
     public ResponseEntity signin(@RequestBody AuthenticationForm data) {
+        SysUserDetail loginUser = sysUserService.signin(data);
+        log.debug("validate loginUser result @{}",loginUser.toString());
+        return ok(loginUser);
 
-        try {
-            String username = data.getUsername();
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
-            SysUser sysUser = sysUserService.getSysUserByLoginName(username);
-            String token = jwtTokenProvider.createToken(username, sysUserService.getSysUserRolesByUser(sysUser).stream()
-                    .map(item -> item.getName()).collect(Collectors.toList()));
-
-            Map<Object, Object> model = new HashMap<>();
-            model.put("username", username);
-            model.put("token", token);
-            return ok(model);
-        } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Invalid username/password supplied");
-        }
     }
 
     @PostMapping("/myMenu")
-    @RequiresPermissions("user")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<SysMenu>> menu() {
-        Subject subject = SecurityUtils.getSubject();
-        SysUser principal = (SysUser) subject.getPrincipal();
-        Session session = subject.getSession();
+        String ip = WebUtil.getIpAddr(WebUtil.getHttpServletRequest());
+        log.info(ip);
+        SysUserMapper userDao = SpringContextHolder.getBean(SysUserMapper.class);
+        log.info(userDao.toString());
+        SysUser principal = UserUtil.getPrincipal();
         List<SysMenu> menus = sysUserService.getSysMenu(principal);
         return ok(menus);
     }
 
     @PostMapping("/logout")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<ResponseMessage> logout() {
-        Subject subject = SecurityUtils.getSubject();
-        if (subject.isAuthenticated()) {
-            // session 会销毁，在SessionListener监听session销毁，清理权限缓存
-            subject.logout();
-        }
+        SecurityContextHolder.clearContext();
+        ThreadLocalUtils.clear();
         return ok(ResponseMessage.info("logouted"));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteSysUser(@PathVariable("id") String id) {
+    public ResponseEntity<ResponseMessage> deleteSysUser(@PathVariable("id") String id) {
         log.debug("delete sysUser id@{}", id);
         int res = sysUserService.delete(id);
         log.debug("deleted res is @{}", res);
@@ -127,7 +105,7 @@ public class SysUserController {
     }
 
     @PostMapping
-    public ResponseEntity insertSysUser(@RequestBody SysUserForm from) {
+    public ResponseEntity<ResponseMessage> insertSysUser(@RequestBody SysUserForm from) {
         log.debug("save staff @{}", from);
         int res = sysUserService.insertSysUser(from);
         log.debug("saved res is @{}", res);

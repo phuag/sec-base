@@ -11,6 +11,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+/**
+ * @author phuag
+ */
 public class JwtTokenAuthenticationFilter extends GenericFilterBean {
 
     private JwtTokenProvider jwtTokenProvider;

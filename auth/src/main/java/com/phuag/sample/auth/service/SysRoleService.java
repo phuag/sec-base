@@ -3,6 +3,7 @@ package com.phuag.sample.auth.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.phuag.sample.auth.dao.SysRoleMapper;
 import com.phuag.sample.auth.domain.SysRole;
+import com.phuag.sample.auth.model.SysRoleDetail;
 import com.phuag.sample.auth.model.SysRoleForm;
 import com.phuag.sample.auth.util.UserUtil;
 import com.phuag.sample.common.persistence.service.CrudService;
@@ -50,9 +51,9 @@ public class SysRoleService extends CrudService<SysRoleMapper, SysRole> {
         dao.insertRoleMenu(sysRole.getId(), permissions);
     }
 
-    public Page<SysRole> roleDetailList(Pageable pageable, String keyword) {
+    public Page<SysRoleDetail> roleDetailList(Pageable pageable, String keyword) {
         Page<SysRole> page = new Page<>(pageable.getPageNumber(),pageable.getPageSize());
-        Page<SysRole> list =  dao.roleDetailList(page,keyword);
+        Page<SysRoleDetail> list =  dao.roleDetailList(page,keyword);
         return list;
     }
 

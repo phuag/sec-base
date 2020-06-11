@@ -1,4 +1,4 @@
-import service from './api'
+import service from '../api'
 
 export const getRoleList = params => { return service.get(`/api/sysRole`, { params: params }) }
 

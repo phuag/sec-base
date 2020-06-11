@@ -101,7 +101,7 @@ public class SysUserDetail implements Serializable {
     private String roles;
 
     /**
-     * 对应的arae的地区名
+     * 对应的token
      */
-    private String areaname;
+    private String token;
 }

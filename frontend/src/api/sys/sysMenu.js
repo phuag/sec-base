@@ -1,4 +1,4 @@
-import service from './api'
+import service from '../api'
 
 export const getMenus = params => { return service.get(`/api/sysMenu/list`, { params: params }) }
 

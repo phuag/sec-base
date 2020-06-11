@@ -3,6 +3,7 @@ package com.phuag.sample.auth.dao;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.phuag.sample.auth.domain.SysRole;
+import com.phuag.sample.auth.model.SysRoleDetail;
 import com.phuag.sample.common.persistence.dao.CrudDao;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
@@ -23,7 +24,7 @@ public interface SysRoleMapper extends CrudDao<SysRole> {
      * @param keyword
      * @return
      */
-    Page<SysRole> roleDetailList(Page<?> page, @Param("keyword") String keyword);
+    Page<SysRoleDetail> roleDetailList(Page<?> page, @Param("keyword") String keyword);
 
     /**
      * 保存角色和菜单的关系

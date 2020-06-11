@@ -7,6 +7,7 @@ import java.util.Optional;
 
 /**
  * 用户上下文
+ * @author phuag
  */
 public class UserContextHolder {
 
@@ -14,6 +15,7 @@ public class UserContextHolder {
 
     private UserContextHolder() {
         this.threadLocal = new ThreadLocal<>();
+        this.setContext(Maps.newHashMap());
     }
 
     /**
@@ -58,6 +60,10 @@ public class UserContextHolder {
      */
     public String getUserId() {
         return Optional.ofNullable(threadLocal.get()).orElse(Maps.newHashMap()).get("user_id");
+    }
+
+    public void setUserId(String userId){
+        threadLocal.get().put("user_id",userId);
     }
 
     /**

@@ -72,7 +72,7 @@
 </template>
 
 <script>
-import { getSysBackupList, backup, deleteBackup, recover } from '../../api/sysBackup'
+import { getSysBackupList, backup, deleteBackup, recover } from '../../api/sys/sysBackup'
 import router from '../../router'
 export default {
   data () {

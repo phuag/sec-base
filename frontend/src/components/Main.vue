@@ -58,8 +58,8 @@
 <script>
 import util from '../common/js/util'
 import store from '../vuex/store'
-import { editSysUser, modifyUserPwd } from '../api/sysUser'
-import { getOfficeList } from '../api/sysOffice'
+import { editSysUser, modifyUserPwd } from '../api/sys/sysUser'
+import { getOfficeList } from '../api/sys/sysOffice'
 export default {
   data () {
     var validateConfirmNewPassword = (rule, value, callback) => {
@@ -134,7 +134,7 @@ export default {
             let para = Object.assign({}, this.profileForm)
             para.birth = (!para.birth || para.birth === '') ? '' : util.formatDate.format(new Date(para.birth), 'yyyy-MM-dd')
             para.officeId = para.officeIds.pop()
-            editSysUser(para).then((res) => {
+            editSysUser(para).then(() => {
               this.profileLoading = false
               this.$message({
                 message: '提交成功',
@@ -155,7 +155,7 @@ export default {
               this.modifyPasswordLoading = false
               this.$message({
                 message: '提交成功',
-                type: 'success'
+                type: res.data.type
               })
             })
           })

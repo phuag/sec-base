@@ -77,9 +77,9 @@
 
 <script>
 // import NProgress from 'nprogress'
-import { getAuthUserListPage, saveAuthUserRole, getAuthUserRole } from '../../api/authUser'
-import { authRoleSelectList } from '../../api/authRole'
-import { getAuthUnitList } from '../../api/authUnit'
+import { getAuthUserListPage, saveAuthUserRole, getAuthUserRole } from '../../api/auth/authUser'
+import { authRoleSelectList } from '../../api/auth/authRole'
+import { getAuthUnitList } from '../../api/auth/authUnit'
 import router from '../../router'
 import util from '../../common/js/util'
 export default {
@@ -112,13 +112,13 @@ export default {
   },
   methods: {
     // 性别显示转换
-    formatSex: function (row, column) {
+    formatSex: function (row) {
       return row.sex === '男' ? '男' : row.sex === '女' ? '女' : '未知'
     },
-    authorized_formatter (row, column) {
+    authorized_formatter (row) {
       return row.authorized === '1' ? '是' : '否'
     },
-    unit_formatter (row, column) {
+    unit_formatter (row) {
       return util.getFullPath(this.unitHash, row.unitParentIds, 'name', '-', row.unitName)
     },
     query () {

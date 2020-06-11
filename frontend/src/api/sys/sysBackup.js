@@ -1,4 +1,4 @@
-import service from './api'
+import service from '../api'
 
 export const getSysBackupList = params => { return service.get(`/api/sysBackup`, { params: params }) }
 

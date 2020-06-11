@@ -15,11 +15,11 @@
 </template>
 
 <script>
-import { requestLogin } from '../api/sysUser'
+import { requestLogin } from '../api/sys/sysUser'
 // import router from '../router'
 import store from '../vuex/store'
 import * as types from '../vuex/types'
-import * as base64 from '../common/js/base64'
+// import * as base64 from '../common/js/base64'
 export default {
   data () {
     return {
@@ -48,7 +48,7 @@ export default {
     handleReset2 () {
       this.$refs.ruleForm2.resetFields()
     },
-    handleSubmit2 (ev) {
+    handleSubmit2 () {
       var _this = this
       this.$refs.ruleForm2.validate((valid) => {
         if (valid) {
@@ -58,7 +58,7 @@ export default {
             this.logining = false
             let user = data
 
-            let tokenData = { token: base64.encode(loginParams.username + ':' + loginParams.password), user: user }
+            let tokenData = { token: data.token, user: user }
             store.dispatch('Login', tokenData)
             _this.$router.push({ path: '/' })
           }).catch(error => {

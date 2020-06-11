@@ -1,7 +1,7 @@
 package com.phuag.sample.auth.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.phuag.sample.auth.domain.SysRole;
+import com.phuag.sample.auth.model.SysRoleDetail;
 import com.phuag.sample.auth.model.SysRoleForm;
 import com.phuag.sample.auth.service.SysRoleService;
 import com.phuag.sample.common.config.Constants;
@@ -32,10 +32,10 @@ public class SysRoleController {
      */
     @GetMapping
     @ResponseBody
-    public ResponseEntity<Page<SysRole>> getAllRole(
+    public ResponseEntity<Page<SysRoleDetail>> getAllRole(
             @RequestParam(value = "q", required = false) String keyword,
             @PageableDefault(page = 0, size = 20, sort = "roleId", direction = Sort.Direction.DESC) Pageable page) {
-        Page<SysRole> roleDetails = roleService.roleDetailList(page, keyword);
+        Page<SysRoleDetail> roleDetails = roleService.roleDetailList(page, keyword);
         return ResponseEntity.ok(roleDetails);
     }
 

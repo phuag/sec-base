@@ -24,6 +24,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @SpringBootApplication
 //@EnableEurekaClient
 @EnableSwagger2
+@ComponentScan(basePackages= "com.phuag.sample")
 public class AuthApplication {
 
     private static final Logger log = LoggerFactory
@@ -47,7 +48,7 @@ public class AuthApplication {
     }
 
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args){
         SpringApplication.run(AuthApplication.class,args);
     }
 }

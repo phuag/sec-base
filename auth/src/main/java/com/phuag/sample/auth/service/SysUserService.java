@@ -6,16 +6,21 @@ import com.phuag.sample.auth.domain.SysMenu;
 import com.phuag.sample.auth.domain.SysOffice;
 import com.phuag.sample.auth.domain.SysRole;
 import com.phuag.sample.auth.domain.SysUser;
+import com.phuag.sample.auth.model.AuthenticationForm;
 import com.phuag.sample.auth.model.SysUserDetail;
 import com.phuag.sample.auth.model.SysUserForm;
-import com.phuag.sample.auth.util.UserUtil;
-import com.phuag.sample.common.persistence.service.CrudService;
-import com.phuag.sample.common.security.Salt;
-import com.phuag.sample.common.util.DTOUtil;
-import com.phuag.sample.common.util.Encodes;
+import com.phuag.sample.auth.security.jwt.JwtTokenProvider;
 import com.phuag.sample.auth.util.WebUtil;
-import org.apache.shiro.crypto.hash.SimpleHash;
+import com.phuag.sample.common.persistence.service.CrudService;
+import com.phuag.sample.common.util.DTOUtil;
+import com.phuag.sample.common.util.ThreadLocalUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,10 +28,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 /**
  * @author Administrator
@@ -36,9 +42,15 @@ import java.util.stream.Collectors;
 @Transactional(rollbackFor = Exception.class)
 public class SysUserService extends CrudService<SysUserMapper, SysUser> {
 
-    private String defaultPwd="123456";
+    private String defaultPwd = "123456";
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    AuthenticationManager authenticationManager;
 
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
 
     public SysUser getSysUserById(String id) {
         return dao.selectById(id);
@@ -47,8 +59,8 @@ public class SysUserService extends CrudService<SysUserMapper, SysUser> {
     public Page<SysUser> getAllSysUser(Pageable page) {
 //        PageHelper.startPage(page.getPageNumber(), page.getPageSize());
         // TODO need to add sort function ,but the pagerhelper is not support well.
-        // 添加排序 PageHelper.orderBy("STAFF_NAME desc");
-        return super.findPage(page,null);
+        // 添加排序
+        return super.findPage(page, null);
     }
 
     public SysUser getSysUserByLoginName(String username) {
@@ -100,12 +112,10 @@ public class SysUserService extends CrudService<SysUserMapper, SysUser> {
     }
 
     /**
-     * 生成安全的密码，生成随机的16位salt并经 过1024次sha-1 hash
+     * 生成安全的密码
      */
     public String encryptPassword(String plainPassword) {
-        byte[] salt = Salt.generateSalt(8);
-        byte[] hashPassword = new SimpleHash("SHA-1", plainPassword, salt, 1024).getBytes();
-        return Encodes.encodeHex(salt) + Encodes.encodeHex(hashPassword);
+        return passwordEncoder.encode(plainPassword);
     }
 
     /**
@@ -116,16 +126,15 @@ public class SysUserService extends CrudService<SysUserMapper, SysUser> {
      * @return 验证成功返回true
      */
     public boolean validatePassword(String plainPassword, String password) {
-        byte[] salt = Encodes.decodeHex(password.substring(0, 16));
-        byte[] hashPassword = new SimpleHash("SHA-1", plainPassword, salt, 1024).getBytes();
-        return password.equals(Encodes.encodeHex(salt) + Encodes.encodeHex(hashPassword));
+        boolean result = passwordEncoder.matches(plainPassword, password);
+        return result;
     }
 
     public Page<SysUserDetail> searchSysUser(String officeId, String keyword, Pageable pageable) {
-        Page<SysUser> page = new Page<>(pageable.getPageNumber(),pageable.getPageSize());
+        Page<SysUser> page = new Page<>(pageable.getPageNumber(), pageable.getPageSize());
 
         // 获取分页结果
-        Page<SysUser> sysUserPage =  dao.getByOfficeAndName(page,officeId, keyword);
+        Page<SysUser> sysUserPage = dao.getByOfficeAndName(page, officeId, keyword);
         List<SysUser> sysUsers = sysUserPage.getRecords();
         // 补充office信息
         List<SysUserDetail> staffDetails = sysUsers.stream().map(sysUser -> {
@@ -133,7 +142,7 @@ public class SysUserService extends CrudService<SysUserMapper, SysUser> {
             return sysUserDetail;
         }).collect(Collectors.toList());
         // 创建pageInfo
-        Page<SysUserDetail> pageInfo = new Page(page.getCurrent(),page.getSize());
+        Page<SysUserDetail> pageInfo = new Page(page.getCurrent(), page.getSize());
         // 设置界面显示对象staffDetails为pageInfo的list
         pageInfo.setRecords(staffDetails);
         pageInfo.setTotal(sysUserPage.getTotal());
@@ -178,14 +187,36 @@ public class SysUserService extends CrudService<SysUserMapper, SysUser> {
         return sysMenus;
     }
 
+    public SysUserDetail signin(AuthenticationForm data) {
+        try {
+            String username = data.getUsername();
+            Authentication a = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
+            a.isAuthenticated();
+            SysUser sysUser = this.getSysUserByLoginName(username);
+            List<SysMenu> menus = this.getSysMenu(sysUser);
+            String token = jwtTokenProvider.createToken(username, menus.stream()
+                    .map(item -> item.getPermissionCode()).collect(Collectors.toList()));
+            SysUserDetail loginUser =  fillOfficeInfo(sysUser);
+            loginUser.setToken(token);
+            ThreadLocalUtils.put(ThreadLocalUtils.USERID_KEY,sysUser.getId());
+            return loginUser;
+        } catch (AuthenticationException e) {
+            throw new BadCredentialsException("Invalid username/password supplied");
+        }
+    }
+
+    public SysUser whoami(HttpServletRequest req) {
+        return this.getSysUserByLoginName(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
+    }
+
     public static void main(String[] args) {
         String pwd = "admin";
         PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        String passencode =  passwordEncoder.encode("admin");
+        String passencode = passwordEncoder.encode("admin");
         System.out.println(passencode);
         //{bcrypt}$2a$10$.UVEQnZqTc3xTJCk3PIXFekHHFdJnv/SVm9xa2iX1TshM.INNMe/e
         //{bcrypt}$2a$10$0wOwSg/BnCHvC2Qd5biSVOmH8oJvyySJ0CsQj6LipWkisUTqxp4ey
-        boolean result = passwordEncoder.matches(pwd,passencode);
+        boolean result = passwordEncoder.matches(pwd, passencode);
         System.out.println(result);
     }
 }

@@ -132,7 +132,7 @@
 </template>
 
 <script>
-import { authPermissionList, authPermissionSave, authPermissionUpdate, authPermissionDelete } from '../../api/authPermission'
+import { authPermissionList, authPermissionSave, authPermissionUpdate, authPermissionDelete } from '../../api/auth/authPermission'
 // import router from '../../router'
 export default {
   data () {
@@ -257,7 +257,7 @@ export default {
         console.log(e)
       })
     },
-    format_useable (row, column) {
+    format_useable (row) {
       return row.useable === '1' ? '正常' : '禁用'
     },
     query () {

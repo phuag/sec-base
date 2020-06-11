@@ -113,8 +113,8 @@
 </template>
 
 <script>
-import { authRoleList, authRoleSave, authRoleUpdate, getPermissionsByRole, authRoleDelete } from '../../api/authRole'
-import { authPermissionSelectList } from '../../api/authPermission'
+import { authRoleList, authRoleSave, authRoleUpdate, getPermissionsByRole, authRoleDelete } from '../../api/auth/authRole'
+import { authPermissionSelectList } from '../../api/auth/authPermission'
 // import router from '../../router'
 export default {
   data () {

@@ -95,11 +95,11 @@
 
 <script>
 // import NProgress from 'nprogress'
-import { getRoleList, removeRole, batchRemoveRole, editRole, addRole } from '../../api/sysRole'
-import { getMenuDetail } from '../../api/sysMenu'
-import MenuInfo from './MenuInfo'
+import { getRoleList, removeRole, batchRemoveRole, editRole, addRole } from '../../api/sys/sysRole'
+import { getMenuDetail } from '../../api/sys/sysMenu'
+// import MenuInfo from './MenuInfo'
 export default {
-  components: { MenuInfo },
+  // components: { MenuInfo },
   data () {
     return {
       props: {
@@ -158,7 +158,7 @@ export default {
       // NProgress.start()
       getRoleList(para).then((res) => {
         this.total = res.data.total
-        this.roles = res.data.list
+        this.roles = res.data.records
         // this.menuname = res.menuname
         this.listLoading = false
         // NProgress.done()
@@ -225,6 +225,7 @@ export default {
       for (let i in row.menus) {
         permissions.push(row.menus[i].id)
       }
+      console.log('row:',row)
     },
     // 显示新增界面
     handleAdd: function () {

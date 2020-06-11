@@ -1,6 +1,7 @@
 package com.phuag.sample.auth.configuration.logging;
 
 import com.phuag.sample.auth.domain.SysUser;
+import com.phuag.sample.auth.util.UserUtil;
 import com.phuag.sample.common.config.logging.AccessLoggerParser;
 import com.phuag.sample.common.logging.AccessLogInfo;
 import com.phuag.sample.common.logging.AccessLogger;
@@ -12,7 +13,6 @@ import com.phuag.sample.common.util.AopUtil;
 import com.phuag.sample.common.util.IdGen;
 import com.phuag.sample.auth.util.WebUtil;
 import org.aopalliance.intercept.MethodInterceptor;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.aop.support.StaticMethodMatcherPointcutAdvisor;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -97,7 +97,7 @@ public class AopAccessLoggerSupport extends StaticMethodMatcherPointcutAdvisor {
         }
         SysUser principal = null;
         try {
-            principal = (SysUser) SecurityUtils.getSubject().getPrincipal();
+            principal = UserUtil.getPrincipal();
             info.setOperUserId(principal.getId());
             info.setOperUserName(principal.getName());
         } catch (Throwable e){

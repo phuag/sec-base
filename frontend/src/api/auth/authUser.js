@@ -1,4 +1,4 @@
-import service from './api'
+import service from '../api'
 
 export const getAuthUserListPage = params => { return service.get(`/api/authUser`, { params: params }) }
 

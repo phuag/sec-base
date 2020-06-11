@@ -23,7 +23,7 @@
   </sql>
 
 
-  <!--<resultMap id="roleDetailMap"  type="com.phuag.sample.auth.model.AuthRoleDetail">
+  <resultMap id="roleDetailMap"  type="com.phuag.sample.auth.model.SysRoleDetail">
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <collection property="menus" ofType="com.phuag.sample.auth.domain.SysMenu" select="getMenus" column="id">
@@ -31,8 +31,8 @@
         <result column="name" property="name"></result>
         <result column="permission" property="permission"></result>
     </collection>
-  </resultMap>-->
-  <select id="roleDetailList" resultMap="BaseResultMap">
+  </resultMap>
+  <select id="roleDetailList" resultMap="roleDetailMap">
     SELECT r.id, r.name, r.useable ,u.name createPerson
     from sys_role r
     LEFT JOIN sys_user u on u.id = r.create_by

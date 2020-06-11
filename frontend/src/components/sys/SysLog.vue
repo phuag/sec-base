@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import { getLogList } from '../../api/sysLog'
+import { getLogList } from '../../api/sys/sysLog'
 import router from '../../router'
 
 export default {

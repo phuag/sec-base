@@ -1,6 +1,3 @@
-/**
- * Copyright &copy; 2012-2014 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
- */
 package com.phuag.sample.auth.util;
 
 import com.google.common.collect.Lists;
@@ -15,9 +12,7 @@ import com.phuag.sample.common.util.Exceptions;
 import com.phuag.sample.common.util.IdGen;
 import com.phuag.sample.common.util.SpringContextHolder;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.apache.shiro.cache.Cache;
-import org.apache.shiro.cache.CacheManager;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.method.HandlerMethod;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,8 +32,8 @@ public class LogUtils {
 	private static SysLogMapper logDao = SpringContextHolder.getBean(SysLogMapper.class);
 	private static SysMenuMapper menuDao = SpringContextHolder.getBean(SysMenuMapper.class);
 
-	private static Cache<String, Map<String, String>> sys_Menu_Cache =
-			SpringContextHolder.getBean(CacheManager.class).getCache("sysCache");
+//	private static Cache<String, Map<String, String>> sys_Menu_Cache =
+//			SpringContextHolder.getBean(CacheManager.class).getCache("sysCache");
 	
 	/**
 	 * 保存日志
@@ -110,7 +105,7 @@ public class LogUtils {
 				String permission = "";
 				if (handler instanceof HandlerMethod){
 					Method m = ((HandlerMethod)handler).getMethod();
-					RequiresPermissions rp = m.getAnnotation(RequiresPermissions.class);
+					PreAuthorize rp = m.getAnnotation(PreAuthorize.class);
 					permission = (rp != null ? StringUtils.join(rp.value(), ",") : "");
 				}
 				log.setTitle(getMenuNamePath(log.getRequestUri(), permission));
@@ -131,10 +126,7 @@ public class LogUtils {
 	 */
 	public static String getMenuNamePath(String requestUri, String permission){
 		String href = StringUtils.substringAfter(requestUri, "");
-		@SuppressWarnings("unchecked")
-		Map<String, String> menuMap = (Map<String, String>)sys_Menu_Cache.get(CACHE_MENU_NAME_PATH_MAP);
-		if (menuMap == null){
-			menuMap = Maps.newHashMap();
+		Map<String, String> menuMap = Maps.newHashMap();
 			List<SysMenu> menuList = menuDao.selectList(null);
 			for (SysMenu menu : menuList){
 				// 获取菜单名称路径（如：系统设置-机构用户-用户管理-编辑）
@@ -157,8 +149,8 @@ public class LogUtils {
 				}
 
 			}
-			sys_Menu_Cache.put(CACHE_MENU_NAME_PATH_MAP, menuMap);
-		}
+//			sys_Menu_Cache.put(CACHE_MENU_NAME_PATH_MAP, menuMap);
+
 		String menuNamePath = menuMap.get(href);
 		if (menuNamePath == null){
 			for (String p : StringUtils.split(permission)){
@@ -173,6 +165,4 @@ public class LogUtils {
 		}
 		return menuNamePath;
 	}
-
-	
 }

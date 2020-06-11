@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-
 /**
- * Created by vvvvvv on 2017/12/6.
+ *
+ * @author phuag
+ * @date 2017/12/6
  */
 public class ThreadLocalUtils {
+    public static final String USERID_KEY = "user_id";
     private static final ThreadLocal<Map<String, Object>> LOCAL = ThreadLocal.withInitial(HashMap::new);
 
     /**

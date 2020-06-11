@@ -1,7 +1,7 @@
 import * as types from '../types'
 import store from '../store'
 import router from '../../router'
-import { getUserMenu } from '../../api/sysUser'
+import { getUserMenu } from '../../api/sys/sysUser'
 import Vue from 'vue'
 
 const user = {
@@ -36,6 +36,7 @@ const user = {
             router.addRoutes(store.getters.addRouters)
             // localStorage.setItem('router', router)
             Vue.prototype.addRouterTag = true
+            commit(types.TITLE,"info")
             resolve()
           })
         }).catch(error => {
