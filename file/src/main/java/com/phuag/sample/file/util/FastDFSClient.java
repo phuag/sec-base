@@ -1,6 +1,6 @@
 package com.phuag.sample.file.util;
 
-import com.phuag.sample.common.model.FastDFSFile;
+import com.phuag.sample.common.core.model.FastDFSFile;
 import org.csource.fastdfs.*;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ClassPathResource;

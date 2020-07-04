@@ -1,7 +1,7 @@
 package com.phuag.sample.file.service;
 
-import com.phuag.sample.common.persistence.service.CrudService;
-import com.phuag.sample.common.util.IdGen;
+import com.phuag.sample.common.core.persistence.service.CrudService;
+import com.phuag.sample.common.core.util.IdGen;
 import com.phuag.sample.file.dao.SecFileMapper;
 import com.phuag.sample.file.dao.VirtualAddressMapper;
 import com.phuag.sample.file.domain.SecFile;
@@ -29,28 +29,28 @@ public class SecFileService extends CrudService<SecFileMapper, SecFile> {
      * 查询md5是否已经存在
      */
     public int checkMd5Whether(String fileMd5) {
-        return dao.checkMd5Whether(fileMd5);
+        return baseMapper.checkMd5Whether(fileMd5);
     }
 
     /**
      * 根据Md5获取文件信息
      */
     public SecFile getFileByMd5(String fileMd5) {
-        return dao.getFileByMd5(fileMd5);
+        return baseMapper.getFileByMd5(fileMd5);
     }
 
     /**
      * 保存文件信息
      */
     public Integer saveFile(SecFile fileDO) {
-        return dao.insert(fileDO);
+        return baseMapper.insert(fileDO);
     }
 
     /**
      * 根据文件ID获取文件信息
      */
     public SecFile getFileByFid(String fileId) {
-        return dao.getFileByFid(fileId);
+        return baseMapper.getFileByFid(fileId);
     }
 
     /**

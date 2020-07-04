@@ -1,6 +1,6 @@
 package com.phuag.sample.file.dao;
 
-import com.phuag.sample.common.persistence.dao.CrudDao;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.phuag.sample.file.domain.SecFile;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Select;
 /**
  * @author phuag
  */
-public interface SecFileMapper  extends CrudDao<SecFile> {
+public interface SecFileMapper  extends BaseMapper<SecFile> {
     /**
      * 查询md5是否已经存在
      *

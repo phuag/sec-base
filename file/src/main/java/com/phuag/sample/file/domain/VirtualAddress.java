@@ -1,10 +1,8 @@
 package com.phuag.sample.file.domain;
 
-import com.phuag.sample.common.persistence.domain.DataEntity;
+import com.phuag.sample.common.core.persistence.domain.DataEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
 
 /**
  * @author phuag

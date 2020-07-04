@@ -100,6 +100,8 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: assign_id
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 logging:
   maxFileSize: 10KB

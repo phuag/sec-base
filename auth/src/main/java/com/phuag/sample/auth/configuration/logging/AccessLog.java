@@ -1,7 +1,8 @@
 package com.phuag.sample.auth.configuration.logging;
 
-import com.phuag.sample.common.logging.AccessLogInfo;
-import com.phuag.sample.common.logging.AccessLoggerListener;
+import com.phuag.sample.common.log.AccessLogInfo;
+import com.phuag.sample.common.log.AccessLoggerListener;
+import com.phuag.sample.common.log.AopAccessLoggerSupport;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

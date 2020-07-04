@@ -1,0 +1,5 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.phuag.sample.common.log.AopAccessLoggerAutoConfiguration,\
+  com.phuag.sample.common.log.AccessLog
+#org.springframework.context.ApplicationContextInitializer=\
+#    com.pig4cloud.pig.common.log.init.ApplicationLoggerInitializer

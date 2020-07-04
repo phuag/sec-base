@@ -1,8 +1,7 @@
 package com.phuag.sample.auth.configuration;
 
-import com.phuag.sample.auth.security.jwt.JwtSecurityConfigurer;
-import com.phuag.sample.auth.security.jwt.JwtTokenProvider;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.phuag.sample.common.security.component.JwtSecurityConfigurer;
+import com.phuag.sample.common.security.component.JwtTokenProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,6 +11,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.annotation.Resource;
+
 /**
  * @author phuag
  */
@@ -19,7 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
-    @Autowired
+    @Resource
     JwtTokenProvider jwtTokenProvider;
 
     @Bean

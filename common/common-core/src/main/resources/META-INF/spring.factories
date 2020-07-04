@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.phuag.sample.common.core.config.RedisTemplateConfig,\
+  com.phuag.sample.common.core.config.RestTemplateConfig,\
+  com.phuag.sample.common.core.util.SpringContextHolder

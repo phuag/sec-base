@@ -1,6 +1,6 @@
 package com.phuag.sample.file.dao;
 
-import com.phuag.sample.common.persistence.dao.CrudDao;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.phuag.sample.file.domain.VirtualAddress;
 import org.apache.ibatis.annotations.Param;
 
@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author phuag
  */
-public interface VirtualAddressMapper  extends CrudDao<VirtualAddress> {
+public interface VirtualAddressMapper  extends BaseMapper<VirtualAddress> {
     /**
      * 获取虚拟地址信息
      */

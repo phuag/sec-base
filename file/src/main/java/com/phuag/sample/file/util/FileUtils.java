@@ -1,10 +1,7 @@
 package com.phuag.sample.file.util;
 
-import com.phuag.sample.common.model.FastDFSFile;
+import com.phuag.sample.common.core.model.FastDFSFile;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;

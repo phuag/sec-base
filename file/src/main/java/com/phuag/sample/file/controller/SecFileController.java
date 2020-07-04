@@ -1,19 +1,21 @@
 package com.phuag.sample.file.controller;
 
-import com.phuag.sample.common.config.Constants;
-import com.phuag.sample.common.model.FolderInfo;
-import com.phuag.sample.common.model.ResponseMessage;
-import com.phuag.sample.common.util.DTOUtil;
-import com.phuag.sample.common.util.JSONUtils;
-import com.phuag.sample.common.util.JedisClusterUtil;
+import com.phuag.sample.common.core.constant.CacheConstants;
+import com.phuag.sample.common.core.constant.Constants;
+import com.phuag.sample.common.core.model.FolderInfo;
+import com.phuag.sample.common.core.model.ResponseMessage;
+import com.phuag.sample.common.core.util.DTOUtil;
+import com.phuag.sample.common.core.util.JSONUtils;
 import com.phuag.sample.file.domain.SecFile;
 import com.phuag.sample.file.domain.VirtualAddress;
 import com.phuag.sample.file.model.*;
 import com.phuag.sample.file.service.SecFileService;
 import com.phuag.sample.file.service.VirtualaddressService;
 import com.phuag.sample.file.util.FileUtils;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -35,16 +37,17 @@ import java.util.List;
 @RestController
 @RequestMapping(value = Constants.URI_API + Constants.URI_SEC_FILE)
 @Slf4j
+@RequiredArgsConstructor
 public class SecFileController {
 
-    @Autowired
     private SecFileService secFileService;
 
-    @Autowired
     private VirtualaddressService virtualaddressService;
 
-    @Autowired
-    private JedisClusterUtil jedisClusterUtil;
+//    @Autowired
+//    private JedisClusterUtil jedisClusterUtil;
+
+    private final CacheManager cacheManager;
 
     @GetMapping("/download")
     public ResponseEntity<ResponseMessage> download(String uid, String vids, HttpServletResponse res) throws IOException {
@@ -79,8 +82,13 @@ public class SecFileController {
                     virtualaddressService.createDir(upPath, parentPath, uid);
                 }
             }
-            String md5 = jedisClusterUtil.getValue("fileMd5:" + fid);
-            jedisClusterUtil.delKey("fileMd5:" + fid);
+
+//            String md5 = jedisClusterUtil.getValue("fileMd5:" + fid);
+//            jedisClusterUtil.delKey("fileMd5:" + fid);
+
+            Cache cache = cacheManager.getCache(CacheConstants.File_DETAILS);
+            String md5 = cache.get("fileMd5:" + fid,String.class);
+            cache.evictIfPresent("fileMd5:" + fid);
             int count = secFileService.checkMd5Whether(md5);
             SecFile fileDO;
             if (count > 0) {

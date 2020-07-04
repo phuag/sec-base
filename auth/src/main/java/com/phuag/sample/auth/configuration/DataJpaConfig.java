@@ -1,7 +1,7 @@
 package com.phuag.sample.auth.configuration;
 
-import com.phuag.sample.auth.domain.SysUser;
-import com.phuag.sample.common.persistence.AuditMetaObjectHandler;
+import com.phuag.sample.admin.api.entity.SysUser;
+import com.phuag.sample.common.core.persistence.AuditMetaObjectHandler;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

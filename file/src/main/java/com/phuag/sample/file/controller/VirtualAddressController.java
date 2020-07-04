@@ -1,9 +1,9 @@
 package com.phuag.sample.file.controller;
 
-import com.phuag.sample.common.config.Constants;
-import com.phuag.sample.common.model.ResponseMessage;
-import com.phuag.sample.common.util.IdGen;
-import com.phuag.sample.common.util.JSONUtils;
+import com.phuag.sample.common.core.constant.Constants;
+import com.phuag.sample.common.core.model.ResponseMessage;
+import com.phuag.sample.common.core.util.IdGen;
+import com.phuag.sample.common.core.util.JSONUtils;
 import com.phuag.sample.file.domain.VirtualAddress;
 import com.phuag.sample.file.model.CreateVirtualAddressForm;
 import com.phuag.sample.file.service.VirtualaddressService;
@@ -11,12 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StopWatch;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.regex.Pattern;
 
 /**
@@ -281,7 +279,7 @@ public class VirtualAddressController {
         virtualAddressDO.setParentPath(request.getParentPath() == null ? "/" : request.getParentPath());
         virtualAddressDO.setCreateDate(new Date());
         virtualAddressDO.setUpdateDate(new Date());
-        int result = virtualaddressService.save(virtualAddressDO);
+        boolean result = virtualaddressService.save(virtualAddressDO);
         log.info("创建文件数据处理结束,result:{}", result);
         return ResponseEntity.ok(ResponseMessage.success("成功"));
     }
