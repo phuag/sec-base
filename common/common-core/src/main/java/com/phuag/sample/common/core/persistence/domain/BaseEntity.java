@@ -3,6 +3,7 @@ package com.phuag.sample.common.core.persistence.domain;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import org.apache.commons.lang3.StringUtils;
@@ -15,7 +16,7 @@ import java.io.Serializable;
  * @author ThinkGem
  * @version 2014-05-16
  */
-public abstract class BaseEntity<T> implements Serializable {
+public abstract class BaseEntity<T extends Model<?>> extends Model implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

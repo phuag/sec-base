@@ -26,7 +26,7 @@ public class JwtTokenAuthenticationFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain filterChain)
-        throws IOException, ServletException {
+            throws IOException, ServletException {
 
         String token = jwtTokenProvider.resolveToken((HttpServletRequest) req);
         if (token != null && jwtTokenProvider.validateToken(token)) {
@@ -35,8 +35,8 @@ public class JwtTokenAuthenticationFilter extends GenericFilterBean {
             if (auth != null) {
                 SecurityContextHolder.getContext().setAuthentication(auth);
                 SysUser principal = (SysUser) auth.getPrincipal();
-                ThreadLocalUtils.put(ThreadLocalUtils.USER_ID,principal.getId());
-                ThreadLocalUtils.put(ThreadLocalUtils.USER_NAME,principal.getName());
+                ThreadLocalUtils.put(ThreadLocalUtils.USER_ID, principal.getId());
+                ThreadLocalUtils.put(ThreadLocalUtils.USER_NAME, principal.getName());
             }
         }
         filterChain.doFilter(req, res);

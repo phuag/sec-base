@@ -22,8 +22,8 @@
         <module>monitor</module>
         <module>auth</module>
         <module>file</module>
-        <module>config</module>
-        <module>registry</module>
+        <!--<module>config</module>
+        <module>registry</module> 使用nacos-->
         <module>upms</module>
     </modules>
 
@@ -34,8 +34,11 @@
         <docker.image.prefix>spring-boot-cloud</docker.image.prefix>
         <spring.cloud.version>Hoxton.SR3</spring.cloud.version>
         <spring-boot-admin.version>2.2.3</spring-boot-admin.version>
+        <spring-cloud-alibaba.version>2.2.1.RELEASE</spring-cloud-alibaba.version>
         <security.oauth.version>2.3.6.RELEASE</security.oauth.version>
+        <mybatis-plus.version>3.3.2</mybatis-plus.version>
         <hutool.version>5.3.5</hutool.version>
+        <swagger.fox.version>2.9.2</swagger.fox.version>
         <sonar.java.binaries>target/sonar</sonar.java.binaries>
     </properties>
     <dependencies>
@@ -58,7 +61,6 @@
     </dependencies>
     <dependencyManagement>
         <dependencies>
-
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
@@ -70,6 +72,14 @@
                 <groupId>de.codecentric</groupId>
                 <artifactId>spring-boot-admin-dependencies</artifactId>
                 <version>${spring-boot-admin.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!--spring cloud alibaba-->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -92,6 +102,13 @@
         </dependencies>
     </dependencyManagement>
     <build>
+        <finalName>${project.name}</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -154,5 +171,17 @@
             </plugins>
         </pluginManagement>
     </build>
-
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <!-- 环境标识，需要与配置文件的名称相对应 -->
+                <profiles.active>dev</profiles.active>
+            </properties>
+            <activation>
+                <!-- 默认环境 -->
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+    </profiles>
 </project>

@@ -19,7 +19,6 @@ import javax.annotation.Resource;
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-
     @Resource
     JwtTokenProvider jwtTokenProvider;
 
@@ -38,19 +37,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         //@formatter:off
         http
-            .httpBasic().disable()
-            .csrf().disable()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
+                .formLogin()
+                //设置登录页面，默认跳转到这个页面,需要前端实现
+                .loginPage("/token/login")
+                //后端设置的密码接收url
+                .loginProcessingUrl("/token/form")
+                .and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .apply(new JwtSecurityConfigurer(jwtTokenProvider))
+                .and()
                 .authorizeRequests()
                 .antMatchers("/api/sysUser/signin").permitAll()
                 .antMatchers("/api/ping").permitAll()
-                .antMatchers("/swagger-ui.html","/v2/api-docs","/swagger-resources/**").permitAll()
+                .antMatchers("/swagger-ui.html", "/v2/api-docs", "/swagger-resources/**").permitAll()
                 .antMatchers("/webjars/**").permitAll()
                 .antMatchers("/druid/**").permitAll()
                 .anyRequest().authenticated()
-            .and()
-            .apply(new JwtSecurityConfigurer(jwtTokenProvider));
+                .and().csrf().disable();
         //@formatter:on
     }
 }

@@ -9,6 +9,9 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 
+/**
+ * @author phuag
+ */
 @Mapper
 @Repository(value="sysMenuMapper")
 public interface SysMenuMapper extends BaseMapper<SysMenu> {

@@ -1,4 +1,3 @@
-
 package com.phuag.sample.common.security.service;
 
 import com.phuag.sample.common.core.constant.CacheConstants;

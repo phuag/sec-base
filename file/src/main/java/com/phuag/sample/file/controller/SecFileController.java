@@ -4,7 +4,7 @@ import com.phuag.sample.common.core.constant.CacheConstants;
 import com.phuag.sample.common.core.constant.Constants;
 import com.phuag.sample.common.core.model.FolderInfo;
 import com.phuag.sample.common.core.model.ResponseMessage;
-import com.phuag.sample.common.core.util.DTOUtil;
+import com.phuag.sample.common.core.util.DTOUtils;
 import com.phuag.sample.common.core.util.JSONUtils;
 import com.phuag.sample.file.domain.SecFile;
 import com.phuag.sample.file.domain.VirtualAddress;
@@ -231,7 +231,7 @@ public class SecFileController {
     public ResponseEntity<VirtualAddressDTO> getVirtualaddress(String vid, String uid) {
         log.info("根据虚拟地址ID获取实体数据处理开始,vid:{}", vid);
         VirtualAddress va = virtualaddressService.getVirtualAddress(vid);
-        VirtualAddressDTO result = DTOUtil.map(va, VirtualAddressDTO.class);
+        VirtualAddressDTO result = DTOUtils.map(va, VirtualAddressDTO.class);
         log.info("根据虚拟地址ID获取实体数据处理结束,result:{}", result);
         return ResponseEntity.ok(result);
     }

@@ -6,7 +6,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 /**
- * Created by vvvvvv on 2017/12/28.
+ *
+ * @author vvvvvv
+ * @date 2017/12/28
  */
 @NoArgsConstructor
 @Data

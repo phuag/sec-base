@@ -2,9 +2,8 @@ package com.phuag.sample.auth;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-//import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -18,7 +17,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @date 2017/3/1
  */
 @SpringBootApplication
-//@EnableEurekaClient
+@EnableFeignClients
 @EnableSwagger2
 //@ComponentScan(basePackages =
 //        {"com.phuag.sample.auth",

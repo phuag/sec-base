@@ -2,5 +2,4 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.phuag.sample.common.security.service.CustomUserDetailsService,\
   com.phuag.sample.common.security.component.JwtTokenProvider,\
   com.phuag.sample.common.security.component.JwtProperties
-#org.springframework.context.ApplicationContextInitializer=\
-#    com.pig4cloud.pig.common.log.init.ApplicationLoggerInitializer
+

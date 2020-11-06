@@ -1,0 +1,77 @@
+server:
+  port: 4000
+#  ssl:
+#    key-store: classpath:httpskey/tomcat.keystore
+#    key-store-password: tomcat
+
+spring:
+  application:
+    name: @artifactId@
+  boot:
+    admin:
+      client:
+        url: http://localhost:8040
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_HOST:pig-register}:${NACOS_PORT:8848}
+      config:
+        server-addr: ${spring.cloud.nacos.discovery.server-addr}
+        file-extension: yml
+        shared-configs:
+          - application-${spring.profiles.active}.${spring.cloud.nacos.config.file-extension}
+  profiles:
+    active: @profiles.active@
+
+  datasource:
+    druid:
+      url: jdbc:mysql://localhost:3306/hdfstest?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      initial-size: 1
+      max-active: 20
+      min-idle: 1
+      # 配置获取连接等待超时的时间
+      max-wait: 60000
+      #打开PSCache，并且指定每个连接上PSCache的大小
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      validation-query: SELECT 'x'
+      test-on-borrow: false
+      test-on-return: false
+      test-while-idle: true
+      #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      time-between-eviction-runs-millis: 60000
+      #配置一个连接在池中最小生存的时间，单位是毫秒
+      min-evictable-idle-time-millis: 300000
+      filters: stat
+      # WebStatFilter配置，说明请参考Druid Wiki，配置_配置WebStatFilter
+      #是否启用StatFilter默认值true
+      web-stat-filter.enabled: true
+      web-stat-filter.url-pattern:  /*
+      web-stat-filter.exclusions: "*.js , *.gif ,*.jpg ,*.png ,*.css ,*.ico , /druid/*"
+      web-stat-filter.session-stat-max-count: 1000
+      web-stat-filter.profile-enable: true
+      # StatViewServlet配置
+      #展示Druid的统计信息,StatViewServlet的用途包括：1.提供监控信息展示的html页面2.提供监控信息的JSON API
+      #是否启用StatViewServlet默认值true
+      stat-view-servlet.enabled: true
+
+mybatis-plus:
+  mapper-locations: classpath*:sqlmap/*Mapper.xml
+  global-config:
+    db-config:
+      id-type: assign_id
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+logging:
+  maxFileSize: 10KB
+  level:
+    root: INFO
+    org.springfamework.web: INFO
+    com.phuag.sample: DEBUG
+    com.alibaba.druid: DEBUG
+  file:
+    name: app.log

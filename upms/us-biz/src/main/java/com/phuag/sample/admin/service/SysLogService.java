@@ -2,11 +2,11 @@ package com.phuag.sample.admin.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.phuag.sample.admin.api.entity.SysLog;
+import com.phuag.sample.admin.api.vo.LogDateVO;
 import com.phuag.sample.admin.dao.SysLogMapper;
 import com.phuag.sample.admin.api.model.LogDateDetail;
-import com.phuag.sample.admin.api.vo.LogDateVO;
 import com.phuag.sample.common.core.persistence.service.CrudService;
-import com.phuag.sample.common.core.util.DTOUtil;
+import com.phuag.sample.common.core.util.DTOUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Pageable;
@@ -42,7 +42,7 @@ public class SysLogService extends CrudService<SysLogMapper, SysLog> {
         logDateVO.setSort(sort);
         Page<SysLog> page = new Page(pageable.getPageNumber(),pageable.getPageSize());
         Page<SysLog> SysLogs = (Page<SysLog>) baseMapper.getAllLog(page,logDateVO);
-        Page<LogDateDetail> LogTryOutDetails = DTOUtil.mapPage(SysLogs, LogDateDetail.class);
+        Page<LogDateDetail> LogTryOutDetails = DTOUtils.mapPage(SysLogs, LogDateDetail.class);
         return LogTryOutDetails;
     }
 

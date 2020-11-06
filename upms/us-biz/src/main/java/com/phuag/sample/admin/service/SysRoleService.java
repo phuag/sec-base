@@ -6,7 +6,7 @@ import com.phuag.sample.admin.dao.SysRoleMapper;
 import com.phuag.sample.admin.api.model.SysRoleDetail;
 import com.phuag.sample.admin.api.model.SysRoleForm;
 import com.phuag.sample.common.core.persistence.service.CrudService;
-import com.phuag.sample.common.core.util.DTOUtil;
+import com.phuag.sample.common.core.util.DTOUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ import java.util.List;
 public class SysRoleService extends CrudService<SysRoleMapper, SysRole> {
 
     public void saveSysRole(SysRoleForm form) {
-        SysRole sysRole = DTOUtil.map(form,SysRole.class);
+        SysRole sysRole = DTOUtils.map(form,SysRole.class);
         sysRole.preInsert();
         String roleId = sysRole.getId();
         int result = baseMapper.insert(sysRole);
@@ -40,7 +40,7 @@ public class SysRoleService extends CrudService<SysRoleMapper, SysRole> {
     public void updateSysRole(String sysRoleId, SysRoleForm form) {
         Assert.hasText(sysRoleId, "sysUser id can not be null");
         SysRole sysRole = baseMapper.selectById(sysRoleId);
-        DTOUtil.mapTo(form, sysRole);
+        DTOUtils.mapTo(form, sysRole);
         // 保存角色相关信息
         save(sysRole);
         List permissions = form.getPermissions();

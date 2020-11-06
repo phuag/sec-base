@@ -13,13 +13,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.text.ParseException;
 
 /**
- * Created by vvvvvv on 2017/12/4.
+ *
+ * @author phuag
+ * @date 2017/12/4
  */
 @RestController
-@RequestMapping(value = Constants.URI_API + Constants.URI_SYS_LOG)
+@RequestMapping(Constants.URI_API + Constants.URI_SYS_LOG)
 @Slf4j
 public class SysLogController {
 
@@ -46,9 +49,13 @@ public class SysLogController {
             @RequestParam(value = "finishTime", required = false) String finishTime,
             @RequestParam(value = "beginTime", required = false) String beginTime,
             @RequestParam(value = "sort", required = false) int sort) throws ParseException {
-        Page<LogDateDetail> syslogs = sysLogService.findPage(page,beginTime,finishTime,sort);
-        return ResponseEntity.ok(syslogs);
+        Page<LogDateDetail> sysLogs = sysLogService.findPage(page,beginTime,finishTime,sort);
+        return ResponseEntity.ok(sysLogs);
+    }
 
+    @PostMapping
+    public ResponseEntity<Boolean> saveLog(@Valid @RequestBody SysLog sysLog){
+        return ResponseEntity.ok(sysLogService.save(sysLog));
     }
 
 }

@@ -1,45 +1,94 @@
-eureka:
-  client:
-    service-url:
-      defaultZoon: http://localhost:8761/
+# 加解密根密码
+jasypt:
+  encryptor:
+    password: pig #根密码
 
+# Spring 相关
+spring:
+  redis:
+    password:
+    host: redis
+
+# 暴露监控端点
 management:
   endpoints:
     web:
       exposure:
-        include: "*"
-    health:
-      show-details: always
+        include: '*'
 
+# feign 配置
+feign:
+  hystrix:
+    enabled: true
+  okhttp:
+    enabled: true
+  httpclient:
+    enabled: false
+  client:
+    config:
+      default:
+        connectTimeout: 10000
+        readTimeout: 10000
+  compression:
+    request:
+      enabled: true
+    response:
+      enabled: true
+
+# hystrix 配置
 hystrix:
   command:
     default:
       execution:
         isolation:
+          strategy: SEMAPHORE
           thread:
-            timeoutInMilliseconds: 10000
+            timeoutInMilliseconds: 60000
+  shareSecurityContext: true
 
+#请求处理的超时时间
 ribbon:
-  ReadTimeout: 5000
-  ConnectTimeout: 5000
+  ReadTimeout: 10000
+  ConnectTimeout: 10000
 
-spring:
-#  rabbitmq:
-#    host: localhost
-  sleuth:
-    sampler:
-      percentage: 1
-    integration:
-      enabled: false
-    scheduled:
-      skip-pattern: "^org.*HystrixStreamTask$"
+# mybaits-plus配置
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  global-config:
+    banner: false
+    db-config:
+      id-type: auto
+      table-underline: true
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  configuration:
+    map-underscore-to-camel-case: true
 
-#authserver:
-#    hostname: localhost
-#    port: 5000
-#    contextPath: /uaa
-
+# spring security 配置
 security:
   oauth2:
     resource:
-      user-info-uri: http://${authserver.hostname}:${authserver.port}${authserver.contextPath}/current
+      loadBalanced: true
+      token-info-uri: http://auth/oauth/check_token
+    # 通用放行URL，服务个性化，请在对应配置文件覆盖
+    ignore:
+      urls:
+        - /v2/api-docs
+        - /actuator/**
+# swagger 配置
+swagger:
+  title: secbase Swagger API
+  license: Powered By phuag
+  licenseUrl: https://phuag.com
+  terms-of-service-url: https://phuag.com
+  contact:
+    email: phuaxy@qq.com
+    url: https://phuag.com
+  authorization:
+    name: pig4cloud OAuth
+    auth-regex: ^.*$
+    authorization-scope-list:
+      - scope: server
+        description: server all
+    token-url-list:
+      - http://${GATEWAY_HOST:pig-gateway}:${GATEWAY-PORT:9999}/auth/oauth/token

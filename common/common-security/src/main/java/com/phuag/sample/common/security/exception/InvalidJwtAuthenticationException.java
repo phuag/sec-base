@@ -2,6 +2,9 @@ package com.phuag.sample.common.security.exception;
 
 import org.springframework.security.core.AuthenticationException;
 
+/**
+ * @author phuag
+ */
 public class InvalidJwtAuthenticationException extends AuthenticationException {
     /**
 	 * 

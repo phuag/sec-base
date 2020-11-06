@@ -3,6 +3,7 @@ package com.phuag.sample.common.core.persistence.domain;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.phuag.sample.common.core.util.IdGen;
@@ -23,7 +24,7 @@ import java.util.Date;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public abstract class DataEntity<T> extends BaseEntity<T> {
+public abstract class DataEntity<T> extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 

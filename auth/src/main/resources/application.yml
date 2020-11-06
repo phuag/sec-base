@@ -1,25 +1,8 @@
-name: spring-test
-
-server:
-  port: 8086
-#  ssl:
-#    key-store: classpath:httpskey/tomcat.keystore
-#    key-store-password: tomcat
-
-info:
-  name: auth-service
-  version: 1.0-SNAPSHOT
 
 spring:
-  application:
-    name: auth-service
-  boot:
-    admin:
-      client:
-        url: http://localhost:8040
   datasource:
     druid:
-      url: jdbc:mysql://${sysbackup.dbIp}:3306/${sysbackup.dbName}?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true
+      url: jdbc:mysql://localhost:3306/hdfstest?serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8&allowMultiQueries=true&useSSL=false&allowPublicKeyRetrieval=true
       username: root
       password: 123456
       driver-class-name: com.mysql.cj.jdbc.Driver
@@ -70,10 +53,6 @@ spring:
       # Spring监控配置，说明请参考Druid Github Wiki，配置_Druid和Spring关联监控配置
       #aop-patterns= # Spring监控AOP切入点，如x.y.z.service.*,配置多个英文逗号分隔
 
-#eureka:
-#  client:
-#    service-url:
-#      defaultZoon: http://localhost:8761/
 
 management:
   endpoints:
@@ -82,11 +61,6 @@ management:
         include: "*"
     health:
       show-details: always
-
-sysbackup:
-  dbInstallPath: D:\soft\MariaDB\bin\
-  dbIp: localhost
-  dbName: hdfstest
 
 mybatis:
   mapper-locations: classpath*:sqlmap/*Mapper.xml   #把xml文件放在com.XX.mapper.*中可能会出现找到的问题，这里把他放在resource下的mapper中

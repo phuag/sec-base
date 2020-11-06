@@ -2,6 +2,7 @@ package com.phuag.sample.admin.api.feign;
 
 import com.phuag.sample.admin.api.entity.SysLog;
 import com.phuag.sample.admin.api.feign.factory.RemoteLogServiceFallbackFactory;
+import com.phuag.sample.common.core.constant.Constants;
 import com.phuag.sample.common.core.constant.SecurityConstants;
 import com.phuag.sample.common.core.constant.ServiceNameConstants;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -23,6 +24,6 @@ public interface RemoteLogService {
 	 * @param from   内部调用标志
 	 * @return succes、false
 	 */
-	@PostMapping("/log")
+	@PostMapping(Constants.URI_API + Constants.URI_SYS_LOG)
 	ResponseEntity<Boolean> saveLog(@RequestBody SysLog sysLog, @RequestHeader(SecurityConstants.FROM) String from);
 }

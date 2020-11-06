@@ -1,8 +1,6 @@
 package com.phuag.sample.auth.configuration;
 
 import com.phuag.sample.admin.api.entity.SysUser;
-import com.phuag.sample.common.core.persistence.AuditMetaObjectHandler;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
@@ -25,15 +23,5 @@ public class DataJpaConfig {
                 .map(Authentication::getPrincipal)
                 .map(SysUser.class::cast)
                 .map(SysUser::getId);
-    }
-    /**
-     * 审计数据插件
-     *
-     * @return AuditMetaObjectHandler
-     */
-    @Bean
-    @ConditionalOnMissingBean(name = "auditMetaObjectHandler")
-    public AuditMetaObjectHandler auditMetaObjectHandler() {
-        return new AuditMetaObjectHandler();
     }
 }

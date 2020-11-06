@@ -83,13 +83,13 @@ public class SysUserController {
         return ok(sysUserDetail);
     }
 
-    @PostMapping("/signin")
-    public ResponseEntity signin(@RequestBody AuthenticationForm data) {
-        SysUserDetail loginUser = sysUserService.signin(data);
-        log.debug("validate loginUser result @{}",loginUser.toString());
-        return ok(loginUser);
-
-    }
+//    @PostMapping("/signin")
+//    public ResponseEntity signin(@RequestBody AuthenticationForm data) {
+//        SysUserDetail loginUser = sysUserService.signin(data);
+//        log.debug("validate loginUser result @{}",loginUser.toString());
+//        return ok(loginUser);
+//
+//    }
 
     @PostMapping("/myMenu")
     @PreAuthorize("isAuthenticated()")
@@ -121,8 +121,6 @@ public class SysUserController {
         boolean res = sysUserService.insertSysUser(from);
         log.debug("saved res is @{}", res);
         return ok(ResponseMessage.info("insert success,res=" + res));
-
-
     }
 
     @PutMapping("/{id}")

@@ -1,6 +1,6 @@
 package com.phuag.sample.common.log.aop;
 
-import com.phuag.sample.common.core.util.AopUtil;
+import com.phuag.sample.common.core.util.AopUtils;
 import com.phuag.sample.common.core.util.ThreadLocalUtils;
 import lombok.Getter;
 import org.aopalliance.intercept.MethodInvocation;
@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Optional;
 
 /**
- *
  * @author vvvvvv
  * @date 2017/12/6
  */
@@ -73,18 +72,18 @@ public class MethodInterceptorHolder {
     }
 
     public <T extends Annotation> T findMethodAnnotation(Class<T> annClass) {
-        return AopUtil.findMethodAnnotation(annClass, method, annClass);
+        return AopUtils.findMethodAnnotation(annClass, method, annClass);
     }
 
     public <T extends Annotation> T findClassAnnotation(Class<T> annClass) {
-        return AopUtil.findAnnotation(target.getClass(), annClass);
+        return AopUtils.findAnnotation(target.getClass(), annClass);
     }
 
     public <T extends Annotation> T findAnnotation(Class<T> annClass) {
-        return AopUtil.findAnnotation(target.getClass(),method, annClass);
+        return AopUtils.findAnnotation(target.getClass(), method, annClass);
     }
 
-    public MethodInterceptorContext createParamContext(){
+    public MethodInterceptorContext createParamContext() {
         return new MethodInterceptorContext() {
             @Override
             public Object getTarget() {
@@ -98,7 +97,7 @@ public class MethodInterceptorHolder {
 
             @Override
             public <T> Optional<T> getParameter(String name) {
-                if(args ==null){
+                if (args == null) {
                     return Optional.empty();
                 }
                 return Optional.of((T) args.get(name));

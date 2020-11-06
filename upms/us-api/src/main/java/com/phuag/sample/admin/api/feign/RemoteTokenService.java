@@ -15,6 +15,7 @@ import java.util.Map;
  */
 @FeignClient(contextId = "remoteTokenService", value = ServiceNameConstants.AUTH_SERVICE, fallbackFactory = RemoteTokenServiceFallbackFactory.class)
 public interface RemoteTokenService {
+
 	/**
 	 * 分页查询token 信息
 	 *

@@ -26,7 +26,7 @@
   <resultMap id="roleDetailMap"  type="com.phuag.sample.admin.api.model.SysRoleDetail">
     <id column="id" property="id" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
-    <collection property="menus" ofType="SysMenu" select="getMenus" column="id">
+    <collection property="menus" ofType="com.phuag.sample.admin.api.entity.SysMenu" select="getMenus" column="id">
         <id column="id" property="id"></id>
         <result column="name" property="name"></result>
         <result column="permission" property="permission"></result>
@@ -43,7 +43,7 @@
       </if>
     </where>
   </select>
-  <select id="getMenus" parameterType="String"  resultType="SysMenu">
+  <select id="getMenus" parameterType="String"  resultType="com.phuag.sample.admin.api.entity.SysMenu">
       SELECT sm.id,sm.code,sm.is_required,sm.name ,sm.permission
       FROM sys_role_menu srm
       RIGHT JOIN sys_menu sm ON sm.id = srm.menu_id

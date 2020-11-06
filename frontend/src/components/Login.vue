@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { requestLogin } from '../api/sys/sysUser'
+import { requestLogin } from '../api/token'
 // import router from '../router'
 import store from '../vuex/store'
 import * as types from '../vuex/types'

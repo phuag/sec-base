@@ -5,8 +5,8 @@ import com.phuag.sample.common.core.constant.SecurityConstants;
 import com.phuag.sample.common.security.component.AuthWebResponseExceptionTranslator;
 import com.phuag.sample.common.security.service.AuthClientDetailsService;
 import com.phuag.sample.common.security.service.AuthUser;
-import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -23,6 +23,7 @@ import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,13 +34,17 @@ import java.util.Map;
  * 认证服务器配置
  */
 @Configuration
-@RequiredArgsConstructor
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter {
-	private final DataSource dataSource;
-	private final UserDetailsService userDetailsService;
-	private final AuthenticationManager authenticationManager;
-	private final RedisConnectionFactory redisConnectionFactory;
+	@Autowired
+	private DataSource dataSource;
+	@Autowired
+	private UserDetailsService userDetailsService;
+	@Autowired
+	private AuthenticationManager authenticationManager;
+	@Autowired
+	private RedisConnectionFactory redisConnectionFactory;
+
 
 	@Override
 	@SneakyThrows

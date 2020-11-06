@@ -13,6 +13,7 @@ import java.util.Date;
 @Slf4j
 public class AuditMetaObjectHandler implements MetaObjectHandler {
 
+    @Override
     public void insertFill(MetaObject metaObject) {
         log.info("start insert fill ....");
         this.strictInsertFill(metaObject, "createDate", Date.class, new Date());
@@ -23,6 +24,7 @@ public class AuditMetaObjectHandler implements MetaObjectHandler {
         this.strictUpdateFill(metaObject, "updateBy", String.class, userId);
     }
 
+    @Override
     public void updateFill(MetaObject metaObject) {
         log.info("start update fill ....");
         this.strictUpdateFill(metaObject, "updateDate", Date.class, new Date());

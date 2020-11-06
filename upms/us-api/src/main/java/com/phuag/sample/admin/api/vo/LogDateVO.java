@@ -10,7 +10,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by Administrator on 2018/7/17.
+ *
+ * @author Administrator
+ * @date 2018/7/17
  * 前台日志页面的查询时间封装类
  */
 @Slf4j

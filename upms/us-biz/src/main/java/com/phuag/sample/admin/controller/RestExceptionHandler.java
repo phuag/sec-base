@@ -45,7 +45,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         if(ex instanceof  ConnectException){
             message = ResultEnum.SERVICE_CONNECT_FAIL.getMsg();
         }
-        return new ResponseEntity<>(new ResponseMessage(ResponseMessage.Type.error,message), HttpStatus.BAD_REQUEST);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ResponseMessage(ResponseMessage.Type.error,message));
     }
 
     @ExceptionHandler(value = {ResourceNotFoundException.class})
@@ -64,7 +64,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             ex.printStackTrace();
         }
         ResponseMessage responseMessage = ResponseMessage.error(ex.getMessage());
-        return new ResponseEntity<ResponseMessage>(responseMessage,HttpStatus.OK);
+        return ResponseEntity.ok(responseMessage);
     }
 
     @ExceptionHandler(value = {InvalidRequestException.class})
@@ -91,7 +91,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             });
         }
 
-        return new ResponseEntity<ResponseMessage>(alert, HttpStatus.UNPROCESSABLE_ENTITY);
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(alert);
     }
 
 }

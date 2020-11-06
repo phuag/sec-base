@@ -1,13 +1,9 @@
 package com.phuag.sample.common.security.service;
 
 import cn.hutool.core.util.ArrayUtil;
-import cn.hutool.core.util.StrUtil;
-import cn.hutool.system.UserInfo;
-import com.phuag.sample.admin.api.entity.SysUser;
 import com.phuag.sample.admin.api.feign.RemoteUserService;
 import com.phuag.sample.admin.api.model.SysUserDetail;
 import com.phuag.sample.common.core.constant.CacheConstants;
-import com.phuag.sample.common.core.constant.CommonConstants;
 import com.phuag.sample.common.core.constant.SecurityConstants;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.Cache;
@@ -15,13 +11,11 @@ import org.springframework.cache.CacheManager;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;

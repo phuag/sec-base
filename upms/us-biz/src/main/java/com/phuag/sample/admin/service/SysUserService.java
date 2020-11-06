@@ -7,20 +7,13 @@ import com.phuag.sample.admin.api.entity.SysOffice;
 import com.phuag.sample.admin.api.entity.SysRole;
 import com.phuag.sample.admin.api.entity.SysUser;
 import com.phuag.sample.admin.dao.SysUserMapper;
-import com.phuag.sample.admin.api.model.AuthenticationForm;
 import com.phuag.sample.admin.api.model.SysUserDetail;
 import com.phuag.sample.admin.api.model.SysUserForm;
 import com.phuag.sample.common.core.persistence.service.CrudService;
-import com.phuag.sample.common.core.util.DTOUtil;
-import com.phuag.sample.common.core.util.WebUtil;
+import com.phuag.sample.common.core.util.DTOUtils;
+import com.phuag.sample.common.core.util.WebUtils;
 import com.phuag.sample.common.security.component.JwtTokenProvider;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,11 +37,10 @@ import java.util.stream.Collectors;
 public class SysUserService extends CrudService<SysUserMapper, SysUser> {
 
     private String defaultPwd = "123456";
-    @Resource
-    private PasswordEncoder passwordEncoder;
+    private static final PasswordEncoder passwordEncoder= PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
-    @Resource
-    AuthenticationManager authenticationManager;
+//    @Resource
+//    AuthenticationManager authenticationManager;
 
     @Resource
     JwtTokenProvider jwtTokenProvider;
@@ -151,7 +143,7 @@ public class SysUserService extends CrudService<SysUserMapper, SysUser> {
     }
 
     public boolean insertSysUser(SysUserForm form) {
-        SysUser sysUser = DTOUtil.map(form, SysUser.class);
+        SysUser sysUser = DTOUtils.map(form, SysUser.class);
         sysUser.setNewRecord(true);
         //复用办公室id
         sysUser.setCompanyId(sysUser.getOfficeId());
@@ -165,20 +157,20 @@ public class SysUserService extends CrudService<SysUserMapper, SysUser> {
     public boolean updateSysUser(String sysUserId, SysUserForm form) {
         Assert.hasText(sysUserId, "sysUser id can not be null");
         SysUser sysUser = baseMapper.selectById(sysUserId);
-        DTOUtil.mapTo(form, sysUser);
+        DTOUtils.mapTo(form, sysUser);
         return save(sysUser);
     }
 
     public void updateUserLoginInfo(SysUser user) {
         // 更新本次登录信息
-        user.setLoginIp(WebUtil.getIpAddr(WebUtil.getHttpServletRequest()));
+        user.setLoginIp(WebUtils.getIpAddr(WebUtils.getHttpServletRequest()));
         user.setLoginDate(new Date());
         baseMapper.updateLoginInfo(user);
     }
 
     public SysUserDetail fillOfficeInfo(SysUser sysUser) {
         Assert.notNull(sysUser, "syUser can not be null");
-        SysUserDetail sysUserDetail = DTOUtil.map(sysUser, SysUserDetail.class);
+        SysUserDetail sysUserDetail = DTOUtils.map(sysUser, SysUserDetail.class);
         SysOffice office = baseMapper.getSysUserOffice(sysUser);
         sysUserDetail.setOffice(office);
         return sysUserDetail;
@@ -190,25 +182,25 @@ public class SysUserService extends CrudService<SysUserMapper, SysUser> {
         return sysMenus;
     }
 
-    public SysUserDetail signin(AuthenticationForm data) {
-        try {
-            String username = data.getUsername();
-            Authentication a = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
-
-            SysUser sysUser = this.getSysUserByLoginName(username);
-            if (a.isAuthenticated()){
-                this.updateUserLoginInfo(sysUser);
-            }
-            List<SysMenu> menus = this.getSysMenu(sysUser.getId());
-            String token = jwtTokenProvider.createToken(username, menus.stream()
-                    .map(item -> item.getPermissionCode()).collect(Collectors.toList()));
-            SysUserDetail loginUser =  fillOfficeInfo(sysUser);
-            loginUser.setToken(token);
-            return loginUser;
-        } catch (AuthenticationException e) {
-            throw new BadCredentialsException("Invalid username/password supplied");
-        }
-    }
+//    public SysUserDetail signin(AuthenticationForm data) {
+//        try {
+//            String username = data.getUsername();
+//            Authentication a = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, data.getPassword()));
+//
+//            SysUser sysUser = this.getSysUserByLoginName(username);
+//            if (a.isAuthenticated()){
+//                this.updateUserLoginInfo(sysUser);
+//            }
+//            List<SysMenu> menus = this.getSysMenu(sysUser.getId());
+//            String token = jwtTokenProvider.createToken(username, menus.stream()
+//                    .map(item -> item.getPermissionCode()).collect(Collectors.toList()));
+//            SysUserDetail loginUser =  fillOfficeInfo(sysUser);
+//            loginUser.setToken(token);
+//            return loginUser;
+//        } catch (AuthenticationException e) {
+//            throw new BadCredentialsException("Invalid username/password supplied");
+//        }
+//    }
 
     public SysUser whoami(HttpServletRequest req) {
         return this.getSysUserByLoginName(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));

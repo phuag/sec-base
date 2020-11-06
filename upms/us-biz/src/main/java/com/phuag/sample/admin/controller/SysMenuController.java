@@ -26,7 +26,7 @@ public class SysMenuController {
     @GetMapping("/list")
     public ResponseEntity<List<SysMenu>> getSysMenu() {
         List<SysMenu> SysMenus = sysMenuService.list();
-        return new ResponseEntity<List<SysMenu>>(SysMenus, HttpStatus.OK);
+        return ResponseEntity.ok(SysMenus);
     }
 
     /**

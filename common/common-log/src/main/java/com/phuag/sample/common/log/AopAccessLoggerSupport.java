@@ -1,12 +1,12 @@
 package com.phuag.sample.common.log;
 
-import com.phuag.sample.common.core.util.AopUtil;
+import com.phuag.sample.common.core.util.AopUtils;
 import com.phuag.sample.common.core.util.ThreadLocalUtils;
 import com.phuag.sample.common.log.aop.MethodInterceptorHolder;
 import com.phuag.sample.common.log.config.AccessLoggerParser;
 import com.phuag.sample.common.log.enums.SysLogType;
 import com.phuag.sample.common.core.util.IdGen;
-import com.phuag.sample.common.core.util.WebUtil;
+import com.phuag.sample.common.core.util.WebUtils;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.springframework.aop.support.StaticMethodMatcherPointcutAdvisor;
 import org.springframework.util.ClassUtils;
@@ -82,10 +82,10 @@ public class AopAccessLoggerSupport extends StaticMethodMatcherPointcutAdvisor {
         info.setTarget(holder.getTarget().getClass());
         info.setMethod(holder.getMethod());
 
-        HttpServletRequest request = WebUtil.getHttpServletRequest();
+        HttpServletRequest request = WebUtils.getHttpServletRequest();
         if (request != null) {
-            info.setHttpHeaders(WebUtil.getHeaders(request));
-            info.setIp(WebUtil.getIpAddr(request));
+            info.setHttpHeaders(WebUtils.getHeaders(request));
+            info.setIp(WebUtils.getIpAddr(request));
             info.setHttpMethod(request.getMethod());
             info.setUrl(request.getRequestURL().toString());
         }
@@ -99,11 +99,11 @@ public class AopAccessLoggerSupport extends StaticMethodMatcherPointcutAdvisor {
 
     @Override
     public boolean matches(Method method, Class<?> aClass) {
-        AccessLogger ann = AopUtil.findAnnotation(aClass, method, AccessLogger.class);
+        AccessLogger ann = AopUtils.findAnnotation(aClass, method, AccessLogger.class);
         if (ann != null && ann.ignore()) {
             return false;
         }
-        RequestMapping mapping = AopUtil.findAnnotation(aClass, method, RequestMapping.class);
+        RequestMapping mapping = AopUtils.findAnnotation(aClass, method, RequestMapping.class);
         return mapping != null;
     }
 }

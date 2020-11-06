@@ -8,7 +8,9 @@ import org.apache.ibatis.annotations.Select;
 import java.util.List;
 
 /**
- * Created by vvvvvv on 2017/12/28.
+ *
+ * @author phuag
+ * @date 2017/12/28
  */
 @Mapper
 public interface SysOfficeMapper extends TreeDao<SysOffice> {

@@ -13,8 +13,8 @@ import java.util.List;
 /**
  * Service基类
  *
- * @author ThinkGem
- * @version 2014-05-16
+ * @author phuag
+ * @version 2020-05-16
  */
 
 public abstract class CrudService<D extends BaseMapper<T>, T extends DataEntity<T>> extends ServiceImpl<D, T> {
