@@ -1,4 +1,4 @@
-package com.phuag.sample.common.log;
+package com.phuag.sample.common.log.annotation;
 
 import com.phuag.sample.common.log.enums.SysLogType;
 

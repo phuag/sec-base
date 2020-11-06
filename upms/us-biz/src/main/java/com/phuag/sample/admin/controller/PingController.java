@@ -2,7 +2,7 @@ package com.phuag.sample.admin.controller;
 
 import com.phuag.sample.common.core.constant.Constants;
 import com.phuag.sample.common.core.model.ResponseMessage;
-import com.phuag.sample.common.log.AccessLogger;
+import com.phuag.sample.common.log.annotation.AccessLogger;
 import com.phuag.sample.common.log.enums.SysLogType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
