@@ -27,10 +27,10 @@ public class SysOauthClientDetails extends DataEntity<SysOauthClientDetails> {
 	/**
 	 * 客户端ID
 	 */
-	@NotBlank(message = "client_id 不能为空")
+	/*@NotBlank(message = "client_id 不能为空")
 	@TableId(value = "client_id", type = IdType.INPUT)
 	@ApiModelProperty(value = "客户端id")
-	private String clientId;
+	private String clientId;*/
 
 	/**
 	 * 客户端密钥

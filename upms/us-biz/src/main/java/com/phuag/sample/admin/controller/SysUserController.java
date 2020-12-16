@@ -4,17 +4,16 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.phuag.sample.admin.api.entity.SysMenu;
 import com.phuag.sample.admin.api.entity.SysUser;
-import com.phuag.sample.admin.api.model.AuthenticationForm;
 import com.phuag.sample.admin.api.model.SysUserDetail;
 import com.phuag.sample.admin.api.model.SysUserForm;
 import com.phuag.sample.admin.api.model.UserPwdForm;
 import com.phuag.sample.admin.service.SysUserService;
 import com.phuag.sample.common.core.constant.Constants;
-import com.phuag.sample.common.core.constant.SecurityConstants;
 import com.phuag.sample.common.core.enums.ResultEnum;
 import com.phuag.sample.common.core.exception.InnerException;
 import com.phuag.sample.common.core.model.ResponseMessage;
 import com.phuag.sample.common.core.util.ThreadLocalUtils;
+import com.phuag.sample.common.security.annotation.Inner;
 import com.phuag.sample.common.security.util.SecurityUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -64,32 +63,23 @@ public class SysUserController {
         String username = SecurityUtils.getUser().getUsername();
         log.debug("get principal @{}", username);
         SysUser user = sysUserService.getOne(Wrappers.<SysUser>query()
-                .lambda().eq(SysUser::getName, username));
-        SysUserDetail sysUserDetail = sysUserService.fillOfficeInfo(user);
-
-        return ok(sysUserDetail);
+                .lambda().eq(SysUser::getLoginName, username));
+        SysUserDetail userInfo = sysUserService.getUserInfo(user);
+        return ok(userInfo);
     }
 
-    @GetMapping("/{username}")
-    ResponseEntity<SysUserDetail> info(@PathVariable("username") String username){
-        log.debug("get principal @{}", username);
+    @Inner
+    @GetMapping("/info/{username}")
+    ResponseEntity<SysUserDetail> info(@PathVariable("username") String username) {
+        log.debug("get username @{}", username);
         SysUser user = sysUserService.getOne(Wrappers.<SysUser>query()
                 .lambda().eq(SysUser::getLoginName, username));
         if (user == null) {
             throw new UsernameNotFoundException("LoginName " + username + " not found");
         }
-        SysUserDetail sysUserDetail = sysUserService.fillOfficeInfo(user);
-
-        return ok(sysUserDetail);
+        SysUserDetail userInfo = sysUserService.getUserInfo(user);
+        return ok(userInfo);
     }
-
-//    @PostMapping("/signin")
-//    public ResponseEntity signin(@RequestBody AuthenticationForm data) {
-//        SysUserDetail loginUser = sysUserService.signin(data);
-//        log.debug("validate loginUser result @{}",loginUser.toString());
-//        return ok(loginUser);
-//
-//    }
 
     @PostMapping("/myMenu")
     @PreAuthorize("isAuthenticated()")
@@ -139,7 +129,7 @@ public class SysUserController {
         } else if (loginName != null) {
             try {
                 sysUserService.getSysUserByLoginName(loginName);
-            }catch (UsernameNotFoundException e){
+            } catch (UsernameNotFoundException e) {
                 // 未找到该用户名的存在
                 return ok(true);
             }

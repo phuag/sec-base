@@ -100,7 +100,7 @@ public class SysUserDetail implements Serializable {
     private Date createDate;
 
     /**
-    * 拥有角色集
+    * 拥有角色Id集
     */
     private String[] roles;
 

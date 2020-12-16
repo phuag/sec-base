@@ -1,23 +1,31 @@
 import * as types from '../types'
 import store from '../store'
 import router from '../../router'
-import { getUserMenu } from '../../api/sys/sysUser'
+import { getUserInfo } from '@/api/token/login'
 import Vue from 'vue'
 
 const user = {
   state: {
     sysUser: '',
-    token: '',
+    access_token: '',
+    refresh_token: '',
+    expires_in: '',
     title: ''
   },
   mutations: {
     [types.LOGIN]: (state, data) => {
-      state.token = data.token
-      state.sysUser = data.user
+      state.access_token = data.access_token
+      state.refresh_token =  data.refresh_token
+      state.expires_in = data.expires_in
+    },
+    [types.SET_USER_INFO]: (state, data) => {
+      state.sysUser = data
     },
     [types.LOGOUT]: (state) => {
-      state.token = ''
       state.sysUser = ''
+      state.access_token = ''
+      state.refresh_token =  ''
+      state.expires_in = ''
     },
     [types.TITLE]: (state, data) => {
       state.title = data
@@ -27,14 +35,15 @@ const user = {
     Login ({ commit }, data) {
       commit(types.LOGIN, data)
     },
-    GetInfo ({ commit }) {
+    GetUserInfo ({ commit }) {
       return new Promise((resolve, reject) => {
-        getUserMenu().then(res => {
-          let userPermission = res.data
+        getUserInfo().then(response => {
+          let data = response.data
+          commit(types.SET_USER_INFO, data)
+          let userPermission = data.permissions
           store.dispatch('GenerateRoutes', userPermission).then(() => {
             // 生成该用户的新路由json操作完毕之后,调用vue-router的动态新增路由方法,将新路由添加
             router.addRoutes(store.getters.addRouters)
-            // localStorage.setItem('router', router)
             Vue.prototype.addRouterTag = true
             commit(types.TITLE,"info")
             resolve()

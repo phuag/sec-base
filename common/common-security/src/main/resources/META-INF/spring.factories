@@ -1,5 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.phuag.sample.common.security.service.CustomUserDetailsService,\
-  com.phuag.sample.common.security.component.JwtTokenProvider,\
-  com.phuag.sample.common.security.component.JwtProperties
+  com.phuag.sample.common.security.component.SecurityInnerAspect
 

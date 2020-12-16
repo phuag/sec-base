@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 
 /**
@@ -21,11 +22,11 @@ import javax.validation.Valid;
  * @since 2018-05-15
  */
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/client")
 @Api(value = "client", tags = "客户端管理模块")
 public class OauthClientDetailsController {
-	private final SysOauthClientDetailsService sysOauthClientDetailsService;
+	@Resource
+	private SysOauthClientDetailsService sysOauthClientDetailsService;
 
 	/**
 	 * 通过ID查询

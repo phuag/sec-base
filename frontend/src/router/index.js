@@ -66,18 +66,18 @@ export const asyncRouterMap = [
 let routesOpenToPublic = ['/login', '/404']
 
 const router = new Router({
-  mode: 'history', // 后端支持可开
+  // mode: 'history', // 后端支持可开
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })
 
 router.beforeEach((to, from, next) => {
-  let user = store.getters.user
-  if (user && user !== '') {
+  let access_token = store.getters.access_token
+  if (access_token && access_token !== '') {
     if (to.path === '/login') {
       next({ path: '/' }) // 有session 想跳到login，转到主页
     } else if (Vue.prototype.addRouterTag === false) {
-      store.dispatch('GetInfo').then(() => {
+      store.dispatch('GetUserInfo').then(() => {
         next({ ...to })
       })
     } else { // 有session 想跳到非login的页面，正常跳转

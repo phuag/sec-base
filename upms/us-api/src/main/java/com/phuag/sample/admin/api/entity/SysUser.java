@@ -1,5 +1,7 @@
 package com.phuag.sample.admin.api.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.phuag.sample.common.core.persistence.domain.DataEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -45,6 +47,7 @@ public class SysUser extends DataEntity<SysUser> {
     /**
      * 生日
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date birth;
     /**
      * 邮箱
@@ -73,6 +76,7 @@ public class SysUser extends DataEntity<SysUser> {
     /**
      * 最后登录日期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date loginDate;
     /**
      * 是否允许登陆

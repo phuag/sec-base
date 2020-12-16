@@ -15,8 +15,10 @@ const service = axios.create({
 
 service.interceptors.request.use(
   config => {
-    if (store.state.user.token) {
-      config.headers.Authorization = `Bearer ${store.state.user.token}`
+    const isToken = (config.headers || {}).isToken === false
+    let token =  store.getters.access_token
+    if (token && !isToken) {
+      config.headers.Authorization = `Bearer ${token}`
     }
     return config
   },

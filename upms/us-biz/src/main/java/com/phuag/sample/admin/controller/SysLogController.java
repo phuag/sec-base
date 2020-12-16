@@ -5,6 +5,7 @@ import com.phuag.sample.admin.api.entity.SysLog;
 import com.phuag.sample.admin.api.model.LogDateDetail;
 import com.phuag.sample.admin.service.SysLogService;
 import com.phuag.sample.common.core.constant.Constants;
+import com.phuag.sample.common.security.annotation.Inner;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -31,7 +32,7 @@ public class SysLogController {
 
     @GetMapping
     @ResponseBody
-    public ResponseEntity<Page<SysLog>> getAllStaff(
+    public ResponseEntity<Page<SysLog>> getAllLog(
             @RequestParam(value = "q", required = false) String keyword,
             @PageableDefault(page = 0, size = 20, sort = "staffId", direction = Sort.Direction.DESC) Pageable pageable) {
         log.debug("get all staffInfo of q@{},page@{}", keyword, pageable);
@@ -53,6 +54,7 @@ public class SysLogController {
         return ResponseEntity.ok(sysLogs);
     }
 
+    @Inner
     @PostMapping
     public ResponseEntity<Boolean> saveLog(@Valid @RequestBody SysLog sysLog){
         return ResponseEntity.ok(sysLogService.save(sysLog));

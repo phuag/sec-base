@@ -8,7 +8,9 @@ import cn.hutool.crypto.Padding;
 import cn.hutool.crypto.symmetric.AES;
 import cn.hutool.http.HttpUtil;
 import com.phuag.sample.common.core.constant.SecurityConstants;
+import com.phuag.sample.gateway.config.GatewayConfigProperties;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
+import javax.annotation.Resource;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.net.URI;
@@ -33,8 +36,9 @@ import java.util.Map;
 public class PasswordDecoderFilter extends AbstractGatewayFilterFactory {
 	private static final String PASSWORD = "password";
 	private static final String KEY_ALGORITHM = "AES";
-	@Value("${security.encode.key:1234567812345678}")
-	private String encodeKey;
+
+	@Autowired
+	private GatewayConfigProperties configProperties;
 
 	private static String decryptAES(String data, String pass) {
 		AES aes = new AES(Mode.CBC, Padding.NoPadding,
@@ -61,7 +65,7 @@ public class PasswordDecoderFilter extends AbstractGatewayFilterFactory {
 			String password = paramMap.get(PASSWORD);
 			if (StrUtil.isNotBlank(password)) {
 				try {
-					password = decryptAES(password, encodeKey);
+					password = decryptAES(password, configProperties.getEncodeKey());
 				} catch (Exception e) {
 					log.error("密码解密失败:{}", password);
 					return Mono.error(e);

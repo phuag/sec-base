@@ -9,11 +9,11 @@ spring:
           uri: lb://auth
           predicates:
             - Path=/auth/**
-          filters:
-            # 验证码处理
-            - ValidateCodeGatewayFilter
-            # 前端密码解密
-            - PasswordDecoderFilter
+#          filters:
+#            # 验证码处理
+#            - ValidateCodeGatewayFilter
+#            # 前端密码解密
+#            - PasswordDecoderFilter
         #UPMS 模块
         - id: us-biz
           uri: lb://us-biz
@@ -33,9 +33,9 @@ spring:
                 fallbackUri: 'forward:/fallback'
 
 security:
-  encode:
-    # 前端密码密钥，必须16位
-    key: 'thanks,pig4cloud'
+  encode-key: 'thanks,pig4cloud'
+  ignore-clients:
+    - test
 
 # 不校验验证码终端
 ignore:

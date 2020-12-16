@@ -16,7 +16,7 @@ import java.util.List;
 public interface SysOfficeMapper extends TreeDao<SysOffice> {
 
     @Select("SELECT * FROM sys_office " +
-            "WHERE del_flag = ${@com.phuag.sample.common.persistence.domain.BaseEntity@DEL_FLAG_NORMAL}  " +
+            "WHERE del_flag = ${@com.phuag.sample.common.core.persistence.domain.BaseEntity@DEL_FLAG_NORMAL}  " +
             "and parent_id = #{officeId,jdbcType=VARCHAR}")
     List<SysOffice> selectSubOfficeById(String officeId);
 }

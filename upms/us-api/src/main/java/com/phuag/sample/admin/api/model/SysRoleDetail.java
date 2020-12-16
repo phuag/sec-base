@@ -67,7 +67,5 @@ public class SysRoleDetail implements Serializable {
      */
     private List<SysMenu> menus;
 
-
-
 }
 

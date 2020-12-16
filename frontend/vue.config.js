@@ -1,20 +1,22 @@
+const url = 'http://pig-gateway:9999'
+let publicPath = './'
 module.exports = {
+  publicPath: publicPath,
+  lintOnSave: true,
+  productionSourceMap: true,
+  css: {
+    // 忽略 CSS order 顺序警告
+    extract: { ignoreOrder: true }
+  },
   devServer: {
     proxy: {
-      '/api': {
-        target: 'http://localhost:8086',
-        changeOrigin: true,
+      '/': {
+        target: url,
+        ws: true,
         pathRewrite: {
-          '^api': '/api'
+          '^/': '/'
         }
-      },
-      '/token': {
-        target: 'http://localhost:8086',
-        changeOrigin: true,
-        pathRewrite: {
-          '^token': '/token'
-        }
-      },
+      }
     }
   }
 }

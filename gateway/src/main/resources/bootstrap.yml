@@ -16,3 +16,12 @@ spring:
   profiles:
     active: @profiles.active@
 
+logging:
+  maxFileSize: 10KB
+  level:
+    root: INFO
+    org.springfamework.web: INFO
+    com.phuag.sample: DEBUG
+    com.alibaba.druid: DEBUG
+  file:
+    name: app.log

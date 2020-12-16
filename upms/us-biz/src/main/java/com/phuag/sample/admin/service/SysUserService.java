@@ -1,5 +1,6 @@
 package com.phuag.sample.admin.service;
 
+import cn.hutool.core.util.ArrayUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.phuag.sample.admin.api.entity.SysMenu;
@@ -12,7 +13,6 @@ import com.phuag.sample.admin.api.model.SysUserForm;
 import com.phuag.sample.common.core.persistence.service.CrudService;
 import com.phuag.sample.common.core.util.DTOUtils;
 import com.phuag.sample.common.core.util.WebUtils;
-import com.phuag.sample.common.security.component.JwtTokenProvider;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -21,8 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,13 +35,13 @@ import java.util.stream.Collectors;
 public class SysUserService extends CrudService<SysUserMapper, SysUser> {
 
     private String defaultPwd = "123456";
-    private static final PasswordEncoder passwordEncoder= PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    private static final PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
 
 //    @Resource
 //    AuthenticationManager authenticationManager;
 
-    @Resource
-    JwtTokenProvider jwtTokenProvider;
+//    @Resource
+//    JwtTokenProvider jwtTokenProvider;
 
     public SysUser getSysUserById(String id) {
         return baseMapper.selectById(id);
@@ -132,6 +130,9 @@ public class SysUserService extends CrudService<SysUserMapper, SysUser> {
         // 补充office信息
         List<SysUserDetail> staffDetails = sysUsers.stream().map(sysUser -> {
             SysUserDetail sysUserDetail = fillOfficeInfo(sysUser);
+            List<SysRole> roles = getSysUserRolesByUser(sysUser);
+            List<String> roleIds = roles.stream().map(SysRole::getId).collect(Collectors.toList());
+            sysUserDetail.setRoles(ArrayUtil.toArray(roleIds, String.class));
             return sysUserDetail;
         }).collect(Collectors.toList());
         // 创建pageInfo
@@ -157,6 +158,7 @@ public class SysUserService extends CrudService<SysUserMapper, SysUser> {
     public boolean updateSysUser(String sysUserId, SysUserForm form) {
         Assert.hasText(sysUserId, "sysUser id can not be null");
         SysUser sysUser = baseMapper.selectById(sysUserId);
+
         DTOUtils.mapTo(form, sysUser);
         return save(sysUser);
     }
@@ -182,6 +184,19 @@ public class SysUserService extends CrudService<SysUserMapper, SysUser> {
         return sysMenus;
     }
 
+    public SysUserDetail getUserInfo(SysUser sysUser) {
+        SysUserDetail userDetail = this.fillOfficeInfo(sysUser);
+        // 设置角色列表 （ID）
+        List<SysRole> roles = baseMapper.getSysUserRolesByUser(sysUser);
+        List<String> roleIds = roles.stream().map(role -> role.getId()).collect(Collectors.toList());
+        userDetail.setRoles(ArrayUtil.toArray(roleIds, String.class));
+
+        List<SysMenu> sysMenus = baseMapper.getSysMenu(sysUser.getId());
+        List<String> sysMenuIds = sysMenus.stream().map(menu -> menu.getPermissionCode()).collect(Collectors.toList());
+        userDetail.setPermissions(ArrayUtil.toArray(sysMenuIds, String.class));
+        return userDetail;
+    }
+
 //    public SysUserDetail signin(AuthenticationForm data) {
 //        try {
 //            String username = data.getUsername();
@@ -202,9 +217,9 @@ public class SysUserService extends CrudService<SysUserMapper, SysUser> {
 //        }
 //    }
 
-    public SysUser whoami(HttpServletRequest req) {
-        return this.getSysUserByLoginName(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
-    }
+//    public SysUser whoami(HttpServletRequest req) {
+//        return this.getSysUserByLoginName(jwtTokenProvider.getUsername(jwtTokenProvider.resolveToken(req)));
+//    }
 
 
 }

@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.phuag.sample.common.core.constant.CacheConstants;
 import com.phuag.sample.common.core.constant.CommonConstants;
+import com.phuag.sample.common.security.annotation.Inner;
 import com.phuag.sample.common.security.util.SecurityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -110,6 +111,7 @@ public class AuthTokenEndpoint {
 	 *
 	 * @param token token
 	 */
+	@Inner
 	@DeleteMapping("/{token}")
 	public ResponseEntity<Boolean> removeToken(@PathVariable("token") String token) {
 		OAuth2AccessToken accessToken = tokenStore.readAccessToken(token);
@@ -138,6 +140,7 @@ public class AuthTokenEndpoint {
 	 * @param params 分页参数
 	 * @return
 	 */
+	@Inner
 	@PostMapping("/page")
 	public ResponseEntity<Page> tokenList(@RequestBody Map<String, Object> params) {
 		//根据分页参数获取对应数据

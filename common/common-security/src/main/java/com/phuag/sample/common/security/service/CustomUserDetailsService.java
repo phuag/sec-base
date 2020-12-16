@@ -6,6 +6,7 @@ import com.phuag.sample.admin.api.model.SysUserDetail;
 import com.phuag.sample.common.core.constant.CacheConstants;
 import com.phuag.sample.common.core.constant.SecurityConstants;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -24,21 +25,20 @@ import java.util.Set;
 /**
  * @author phuag
  */
-@Component
+@Slf4j
+@Service
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
-//    private SysUserMapper users;
-
     private final RemoteUserService remoteUserService;
     private final CacheManager cacheManager;
-
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Cache cache = cacheManager.getCache(CacheConstants.USER_DETAILS);
         if (cache != null && cache.get(username) != null) {
-            return (UserDetails) cache.get(username).get();
+            UserDetails cacheUserDetails =  (UserDetails) cache.get(username).get();
+            return cacheUserDetails;
         }
 
         ResponseEntity<SysUserDetail> result = remoteUserService.info(username, SecurityConstants.FROM_IN);
@@ -59,7 +59,6 @@ public class CustomUserDetailsService implements UserDetailsService {
             Arrays.stream(info.getRoles()).forEach(role -> dbAuthsSet.add(SecurityConstants.ROLE + role));
             // 获取资源
             dbAuthsSet.addAll(Arrays.asList(info.getPermissions()));
-
         }
         Collection<? extends GrantedAuthority> authorities
                 = AuthorityUtils.createAuthorityList(dbAuthsSet.toArray(new String[0]));

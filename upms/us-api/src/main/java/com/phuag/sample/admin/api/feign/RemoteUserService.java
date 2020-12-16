@@ -25,7 +25,7 @@ public interface RemoteUserService {
      * @param from     调用标志
      * @return R
      */
-    @GetMapping(Constants.URI_API + Constants.URI_SYS_USER + "/{username}")
+    @GetMapping(Constants.URI_API + Constants.URI_SYS_USER + "/info/{username}")
     ResponseEntity<SysUserDetail> info(@PathVariable("username") String username
             , @RequestHeader(SecurityConstants.FROM) String from);
 

@@ -64,9 +64,7 @@
 </template>
 
 <script>
-  import {
-    requestLogout
-  } from '../api/sys/sysUser'
+  import { requestLogout } from '../api/token/login'
   import store from '../vuex/store'
 
   export default {

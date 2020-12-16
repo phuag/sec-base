@@ -25,7 +25,7 @@ function hasPermission (menus, route) {
  */
 function filterAsyncRouter (routerMap, menus) {
   const accessedRouters = routerMap.filter(route => {
-    let menuCode = Array.from(menus, value => value.code)
+    let menuCode = Array.from(menus, value => value.split(':')[0])
     // filter,js语法里数组的过滤筛选方法
     if (hasPermission(menuCode, route)) {
       if (route.children && route.children.length) {

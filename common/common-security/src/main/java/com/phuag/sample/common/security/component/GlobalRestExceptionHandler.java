@@ -1,4 +1,4 @@
-package com.phuag.sample.admin.controller;
+package com.phuag.sample.common.security.component;
 
 import com.phuag.sample.common.core.constant.ApiErrors;
 import com.phuag.sample.common.core.enums.ResultEnum;
@@ -6,8 +6,7 @@ import com.phuag.sample.common.core.exception.InnerException;
 import com.phuag.sample.common.core.exception.InvalidRequestException;
 import com.phuag.sample.common.core.exception.ResourceNotFoundException;
 import com.phuag.sample.common.core.model.ResponseMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -26,10 +26,9 @@ import java.util.List;
  * Called when an exception occurs during request processing. Transforms exception message into JSON format.
  * @author vvvvvv
  */
-//@ControllerAdvice(annotations = RestController.class)
-public class RestExceptionHandler extends ResponseEntityExceptionHandler {
-
-    private static final Logger log = LoggerFactory.getLogger(RestExceptionHandler.class);
+@Slf4j
+@RestControllerAdvice
+public class GlobalRestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Resource
     private MessageSource messageSource;

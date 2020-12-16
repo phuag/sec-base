@@ -58,13 +58,13 @@ spring:
       #是否启用StatViewServlet默认值true
       stat-view-servlet.enabled: true
 
-mybatis-plus:
-  mapper-locations: classpath*:sqlmap/*Mapper.xml
-  global-config:
-    db-config:
-      id-type: assign_id
-  configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#mybatis-plus:
+#  mapper-locations: classpath*:sqlmap/*Mapper.xml
+#  global-config:
+#    db-config:
+#      id-type: auto
+#  configuration:
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 logging:
   maxFileSize: 10KB

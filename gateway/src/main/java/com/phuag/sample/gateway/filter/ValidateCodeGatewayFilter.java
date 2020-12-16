@@ -8,7 +8,7 @@ import com.phuag.sample.common.core.constant.SecurityConstants;
 import com.phuag.sample.common.core.exception.ValidateCodeException;
 import com.phuag.sample.common.core.model.ResponseMessage;
 import com.phuag.sample.common.core.util.WebUtils;
-import com.phuag.sample.gateway.config.IgnoreClientConfiguration;
+import com.phuag.sample.gateway.config.GatewayConfigProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +33,7 @@ import reactor.core.publisher.Mono;
 @Component
 @RequiredArgsConstructor
 public class ValidateCodeGatewayFilter extends AbstractGatewayFilterFactory {
-	private final IgnoreClientConfiguration ignoreClient;
+	private final GatewayConfigProperties configProperties;
 	private final ObjectMapper objectMapper;
 	private final RedisTemplate redisTemplate;
 
@@ -57,7 +57,7 @@ public class ValidateCodeGatewayFilter extends AbstractGatewayFilterFactory {
 			// 终端设置不校验， 直接向下执行
 			try {
 				String[] clientInfos = WebUtils.getClientId(request);
-				if (ignoreClient.getClients().contains(clientInfos[0])) {
+				if (configProperties.getIgnoreClients().contains(clientInfos[0])) {
 					return chain.filter(exchange);
 				}
 

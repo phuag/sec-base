@@ -13,23 +13,26 @@ import java.util.Collection;
  * 扩展用户信息
  */
 public class AuthUser extends User {
+
 	/**
 	 * 用户ID
 	 */
 	@Getter
 	private String id;
+
 	/**
 	 * 部门ID
 	 */
 	@Getter
 	private String officeId;
 
+
 	/**
 	 * Construct the <code>User</code> with the details required by
 	 * {@link DaoAuthenticationProvider}.
 	 *
 	 * @param id                    用户ID
-	 * @param officeId                部门ID
+	 * @param officeId				部门ID
 	 * @param username              the username presented to the
 	 *                              <code>DaoAuthenticationProvider</code>
 	 * @param password              the password that should be presented to the

@@ -29,7 +29,7 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @return
      */
     @Select("SELECT * FROM sys_user " +
-            "WHERE del_flag = ${@com.phuag.sample.common.persistence.domain.BaseEntity@DEL_FLAG_NORMAL}  " +
+            "WHERE del_flag = ${@com.phuag.sample.common.core.persistence.domain.BaseEntity@DEL_FLAG_NORMAL}  " +
             "and login_name= #{loginName,jdbcType=VARCHAR}")
     Optional<SysUser> selectSysUserByLoginName(String loginName);
 
@@ -39,13 +39,13 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      * @return
      */
     @Select("SELECT * FROM sys_role " +
-            "WHERE del_flag = ${@com.phuag.sample.common.persistence.domain.BaseEntity@DEL_FLAG_NORMAL}  " +
+            "WHERE del_flag = ${@com.phuag.sample.common.core.persistence.domain.BaseEntity@DEL_FLAG_NORMAL}  " +
             "and id in " +
             "(select role_id from sys_user_role where user_id = #{id,jdbcType=VARCHAR})")
     List<SysRole> getSysUserRolesByUser(SysUser user);
 
     @Select("SELECT * FROM sys_office " +
-            "WHERE del_flag = ${@com.phuag.sample.common.persistence.domain.BaseEntity@DEL_FLAG_NORMAL}  " +
+            "WHERE del_flag = ${@com.phuag.sample.common.core.persistence.domain.BaseEntity@DEL_FLAG_NORMAL}  " +
             "and id = #{officeId,jdbcType=VARCHAR}")
     SysOffice getSysUserOffice(SysUser user);
 
@@ -71,7 +71,7 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
     List<String> getRoles(String id);
 
     @Select("SELECT * FROM sys_menu " +
-            "WHERE del_flag = ${@com.phuag.sample.common.persistence.domain.BaseEntity@DEL_FLAG_NORMAL}  " +
+            "WHERE del_flag = ${@com.phuag.sample.common.core.persistence.domain.BaseEntity@DEL_FLAG_NORMAL}  " +
             "and id in (" +
             "select t.menu_id from sys_role_menu t, sys_user_role w " +
             "where w.role_id = t.role_id and w.user_id =#{userId,jdbcType=VARCHAR}" +

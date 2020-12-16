@@ -170,6 +170,7 @@ export default {
     this.initOfficeOptions()
     this.profileForm = store.getters.user
     this.profileForm.officeIds = this.profileForm.office.parentIds.split(',')
+    .filter(item => item != '' & item !='0')
     this.profileForm.officeIds.push(this.profileForm.office.id)
   }
 }

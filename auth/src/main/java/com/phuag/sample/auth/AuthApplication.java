@@ -2,6 +2,7 @@ package com.phuag.sample.auth;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -16,8 +17,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @author phuag
  * @date 2017/3/1
  */
-@SpringBootApplication
-@EnableFeignClients
+@SpringCloudApplication
+@EnableFeignClients(basePackages = { "com.phuag.sample" })
 @EnableSwagger2
 //@ComponentScan(basePackages =
 //        {"com.phuag.sample.auth",

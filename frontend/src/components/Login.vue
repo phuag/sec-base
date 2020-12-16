@@ -2,7 +2,7 @@
   <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px" class="demo-ruleForm login-container">
     <h3 class="title">系统登录</h3>
     <el-form-item prop="account">
-      <el-input type="text" v-model="ruleForm2.account" auto-complete="off" placeholder="账号"></el-input>
+      <el-input type="text" v-model="ruleForm2.account" auto-complete="off" placeholder="用户名"></el-input>
     </el-form-item>
     <el-form-item prop="checkPass">
       <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" placeholder="密码"></el-input>
@@ -15,11 +15,9 @@
 </template>
 
 <script>
-import { requestLogin } from '../api/token'
-// import router from '../router'
+import { requestLogin } from '../api/token/login'
 import store from '../vuex/store'
 import * as types from '../vuex/types'
-// import * as base64 from '../common/js/base64'
 export default {
   data () {
     return {
@@ -53,14 +51,15 @@ export default {
       this.$refs.ruleForm2.validate((valid) => {
         if (valid) {
           this.logining = true
-          let loginParams = { username: this.ruleForm2.account, password: this.ruleForm2.checkPass }
-          requestLogin(loginParams).then(data => {
+          let loginParams = { username: this.ruleForm2.account, 
+                              password: this.ruleForm2.checkPass,
+                              grant_type:'password',
+                              scope: 'server' }
+          requestLogin(loginParams).then(res => {
             this.logining = false
-            let user = data
-
-            let tokenData = { token: data.token, user: user }
-            store.dispatch('Login', tokenData)
-            _this.$router.push({ path: '/' })
+            let data = res.data
+            store.dispatch('Login', data)
+            _this.$router.push({ path: '/' }).catch(err => console.log(err))
           }).catch(error => {
             console.log(error)
             this.logining = false

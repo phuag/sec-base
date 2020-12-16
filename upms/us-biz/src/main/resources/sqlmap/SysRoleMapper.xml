@@ -37,7 +37,7 @@
     from sys_role r
     LEFT JOIN sys_user u on u.id = r.create_by
     <where>
-      AND r.del_flag = ${@com.phuag.sample.common.persistence.domain.BaseEntity@DEL_FLAG_NORMAL}
+      AND r.del_flag = ${@com.phuag.sample.common.core.persistence.domain.BaseEntity@DEL_FLAG_NORMAL}
       <if test="keyword != null and keyword != ''">
         AND r.name LIKE concat('%',LOWER(#{keyword,jdbcType=VARCHAR}),'%')
       </if>

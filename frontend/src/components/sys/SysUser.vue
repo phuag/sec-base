@@ -79,7 +79,7 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="角色授予:">
-          <el-select v-model="editForm.roles" filterable placeholder="请选择">
+          <el-select v-model="editForm.roles" multiple filterable placeholder="请选择">
             <el-option v-for="item in roleOptions" :key="item.id" :label="item.name" :value="item.id">
             </el-option>
           </el-select>
@@ -202,7 +202,7 @@ export default {
         officeIds: [],
         loginIp: '',
         loginDate: '',
-        roles: ''
+        roles: []
       },
       roleOptions: [],
 
@@ -280,7 +280,7 @@ export default {
     },
     getSysRoles () {
       getRoleList().then((res) => {
-        this.roleOptions = res.data.list
+        this.roleOptions = res.data.records
       }).catch(err => {
         console.log(err)
       })
