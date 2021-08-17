@@ -70,14 +70,14 @@
     </if>
   </select>
 
-  <insert id="addUserRole" parameterType="com.phuag.sample.admin.api.model.SysUserForm" >
+<!--  <insert id="addUserRole" parameterType="com.phuag.sample.admin.api.model.SysUserForm" >
     INSERT
     INTO
     sys_user_role
     (user_id,role_id)
     VALUES
     (#{id,jdbcType=VARCHAR},#{role,jdbcType=VARCHAR})
-  </insert>
+  </insert>-->
 
   <select id="getRoles" parameterType="String" resultType="String">
     SELECT

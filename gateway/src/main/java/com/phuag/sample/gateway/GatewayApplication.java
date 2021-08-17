@@ -1,13 +1,16 @@
 package com.phuag.sample.gateway;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.cloud.client.SpringCloudApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
  * @author phuag
  */
-@SpringCloudApplication
+@EnableDiscoveryClient
+@SpringBootApplication
 @ConfigurationPropertiesScan
 public class GatewayApplication {
 

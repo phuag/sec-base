@@ -5,9 +5,15 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import org.apache.commons.lang3.StringUtils;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,16 +41,28 @@ public class JSONUtils<T> {
     /**
      * 将JSON字符串转化为JAVA BEAN
      *
-     * @param json JSON字符串
+     * @param json  JSON字符串
      * @param clazz JAVA BEAN 类型
      */
     public static final <T> T parseObject(String json, Class<T> clazz) {
-        T t = (T) JSON.parseObject(json, clazz);
+        T t = JSON.parseObject(json, clazz);
         return t;
     }
 
+    public static final <T> T parseObject(InputStream inputStream, Class<?> clazz) {
+        T t = null;
+        try {
+            t = JSON.parseObject(inputStream, clazz);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return t;
+    }
+
+
     /**
      * 将JSON字符串转化为JSON数组
+     *
      * @param json JSON字符串
      */
     public static final JSONArray parseArray(String json) {
@@ -54,7 +72,8 @@ public class JSONUtils<T> {
 
     /**
      * 将JSON字符串转为JAVA 集合
-     * @param json JSON字符串
+     *
+     * @param json  JSON字符串
      * @param clazz 集合中BEAN类型
      */
     public static final <T> List<T> parseArray(String json, Class<T> clazz) {
@@ -63,7 +82,8 @@ public class JSONUtils<T> {
     }
 
     /**
-     *  将JSON 对象转化 为JSON 字符串
+     * 将JSON 对象转化 为JSON 字符串
+     *
      * @param object JSON 对象
      */
     public static final String toJSONString(Object object) {
@@ -74,6 +94,7 @@ public class JSONUtils<T> {
 
     /**
      * 将JSON字符串转化为MAP对象
+     *
      * @param json JSON字符串
      */
     public static final Map<String, Object> convertJsonToMap(String json) {
@@ -86,7 +107,8 @@ public class JSONUtils<T> {
 
     /**
      * 将JAVA对象转化为JSON字符串以及特定的时间格式
-     * @param object JAVA 对象
+     *
+     * @param object     JAVA 对象
      * @param dataFormat 日期格式
      */
     public static final String toJSONString(Object object, String dataFormat) {
@@ -96,16 +118,17 @@ public class JSONUtils<T> {
 
     /**
      * json数组转List
+     *
      * @param search
      * @return
      */
-    public  List<T> jsonToList(String search, T t){
+    public List<T> jsonToList(String search, T t) {
         List<T> resultList = new ArrayList<>();
-        List<Map<String,String>> listObjectFir = (List<Map<String,String>>) JSONArray.parse(search);
-        for(Map<String,String> mapList : listObjectFir){
+        List<Map<String, String>> listObjectFir = (List<Map<String, String>>) JSONArray.parse(search);
+        for (Map<String, String> mapList : listObjectFir) {
             Field[] fields = t.getClass().getFields();
-            for (Field field: fields) {
-                if(mapList.get(field.getName())!= null){
+            for (Field field : fields) {
+                if (mapList.get(field.getName()) != null) {
                     StringBuffer setMethod = new StringBuffer().append("set").append(field.getName().substring(0, 1).toUpperCase()).append(field.getName().substring(1));
                     try {
                         t.getClass().getMethod(setMethod.toString()).invoke(t);

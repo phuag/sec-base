@@ -7,7 +7,7 @@ export const requestLogin = data => {
     url: '/auth/oauth/token',
     headers: {
       'isToken': false,
-      'Authorization': 'Basic cGlnOnBpZw=='
+      'Authorization': 'Basic cGlnOnBpZw==' //pig:pig
     },
     method: 'post',
     params: data

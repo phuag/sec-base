@@ -100,6 +100,7 @@ public class SysUserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseMessage> deleteSysUser(@PathVariable("id") String id) {
         log.debug("delete sysUser id@{}", id);
+//        SysUser user = sysUserService.getById(id);
         boolean res = sysUserService.removeById(id);
         log.debug("deleted res is @{}", res);
         return ok(ResponseMessage.info("delete staff success:" + res));

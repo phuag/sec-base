@@ -5,6 +5,9 @@ import com.phuag.sample.common.core.persistence.injector.TreeSqlInjector;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 
+/**
+ * @author phuag
+ */
 public class MybatisInjectConfig {
 
     @Bean

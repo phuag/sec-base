@@ -9,7 +9,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 /**
- * Created by vvvvvv on 2017/12/4.
+ *
+ * @author vvvvvv
+ * @date 2017/12/4
  */
 @Repository(value="sysLogMapper")
 @Mapper

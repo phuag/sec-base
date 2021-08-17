@@ -70,9 +70,5 @@ public class SysUserForm implements Serializable{
     */
     private List<String> roles;
 
-   /**
-   * 临时封装角色，每次一个角色，循环sqL语句
-   */
-   private String role;
 
 }

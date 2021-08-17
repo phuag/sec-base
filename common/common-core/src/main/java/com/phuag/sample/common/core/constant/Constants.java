@@ -21,6 +21,8 @@ public class Constants {
     public static final String URI_SEC_FILE = "/secFile";
     public static final String URI_MD5_CHECK = "/md5";
 
+    public static final String URI_DATA_SOURCE = "/dataSource";
+
     /**
      * 超级管理员ID
      */

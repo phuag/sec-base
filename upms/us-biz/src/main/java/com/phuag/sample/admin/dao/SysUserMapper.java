@@ -7,10 +7,7 @@ import com.phuag.sample.admin.api.entity.SysOffice;
 import com.phuag.sample.admin.api.entity.SysRole;
 import com.phuag.sample.admin.api.entity.SysUser;
 import com.phuag.sample.admin.api.model.SysUserForm;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -57,11 +54,21 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
      */
     Page<SysUser> getByOfficeAndName(Page<SysUser> page, @Param("officeId") String officeId, @Param("keyword")String keyword);
 
+    @Delete("DELETE FROM sys_user_role WHERE user_id = #{sysUserId}")
+    int deleteUserRole(String sysUserId);
 
     /**
     * 在sys_user_role中生成用户对应角色关系
     */
-    int addUserRole(SysUserForm form);
+    @Insert(" <script>" +
+            "INSERT INTO sys_user_role" +
+            " (user_id,role_id)" +
+            " VALUES " +
+            "<foreach collection='roleIds' item='item' separator=','>"+
+            "(#{userId,jdbcType=VARCHAR}, #{item,jdbcType=VARCHAR})"+
+            "</foreach>"+
+            " </script>")
+    int addUserRole(String userId,List<String> roleIds);
 
     /**
      * 查询时把所有的对应角色封装进入SysUserDatail
@@ -88,4 +95,6 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
             "login_Date = #{loginDate} " +
             "WHERE id = #{id}")
     int updateLoginInfo(SysUser user);
+
+
 }

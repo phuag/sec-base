@@ -2,7 +2,7 @@ package com.phuag.sample.admin.api.feign.factory;
 
 import com.phuag.sample.admin.api.feign.RemoteTokenService;
 import com.phuag.sample.admin.api.feign.fallback.RemoteTokenServiceFallbackImpl;
-import feign.hystrix.FallbackFactory;
+import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
 /**

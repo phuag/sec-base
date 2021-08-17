@@ -18,12 +18,14 @@ Thanks.
   * 技术选择
   
     spring-cloud
+    
+    nacos + spring gateway + spring-boot-admin 
 
-    mybatis + pagehelper + druid
+    mybatis + mybatispuls + druid
 
-    shiro
+    spring-security + oauth2
 
-    ehcache
+    redis
     
   * 运行及开发环境
   

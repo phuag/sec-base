@@ -2,7 +2,7 @@ package com.phuag.sample.admin.api.feign.factory;
 
 import com.phuag.sample.admin.api.feign.RemoteUserService;
 import com.phuag.sample.admin.api.feign.fallback.RemoteUserServiceFallbackImpl;
-import feign.hystrix.FallbackFactory;
+import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
 
 /**

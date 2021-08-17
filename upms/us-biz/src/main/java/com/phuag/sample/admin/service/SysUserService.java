@@ -11,6 +11,7 @@ import com.phuag.sample.admin.dao.SysUserMapper;
 import com.phuag.sample.admin.api.model.SysUserDetail;
 import com.phuag.sample.admin.api.model.SysUserForm;
 import com.phuag.sample.common.core.persistence.service.CrudService;
+import com.phuag.sample.common.core.persistence.service.ServiceException;
 import com.phuag.sample.common.core.util.DTOUtils;
 import com.phuag.sample.common.core.util.WebUtils;
 import org.springframework.data.domain.Pageable;
@@ -158,9 +159,18 @@ public class SysUserService extends CrudService<SysUserMapper, SysUser> {
     public boolean updateSysUser(String sysUserId, SysUserForm form) {
         Assert.hasText(sysUserId, "sysUser id can not be null");
         SysUser sysUser = baseMapper.selectById(sysUserId);
-
         DTOUtils.mapTo(form, sysUser);
-        return save(sysUser);
+        boolean res = save(sysUser);
+        if (res) {
+            // 更新用户与角色关联
+            baseMapper.deleteUserRole(sysUserId);
+            List<String> userRoles = form.getRoles();
+            if (userRoles != null && userRoles.size() > 0) {
+                int resNum = baseMapper.addUserRole(sysUserId, userRoles);
+                return res && (resNum > 0);
+            }
+        }
+        return res;
     }
 
     public void updateUserLoginInfo(SysUser user) {
